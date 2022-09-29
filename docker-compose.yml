@@ -1,0 +1,49 @@
+# version: '1.29.2'
+services:
+  node:
+    container_name: repeatl_node_container
+    build: .
+    ports:
+      - ${PORT_NODE_HOST}:${PORT_NODE_CONTAINER}
+      # - 4000:4000
+    depends_on:
+      - postgres
+    # links:
+    #   - postgres
+    environment:
+      PORT: 4000
+    networks:
+      - custom_net
+    deploy:
+      restart_policy:
+        condition: any
+        # delay: 3s
+    # command: nodemon
+    volumes:
+      - type: bind
+        source: ./src
+        target: /download/docker_app/src
+  postgres:
+    container_name: repeatl_pg_container
+    build: ./database
+    image: "postgres"
+    restart: always
+    ports:
+      - ${PORT_POSTGRES_HOST}:${PORT_POSTGRES_CONTAINER}
+      # - 5432:5432
+    environment:
+      # POSTGRES_USER: 'test'
+      POSTGRES_USER: ${POSTGRES_USER}
+      # POSTGRES_PASSWORD: 'test'
+      POSTGRES_PASSWORD: ${POSTGRES_USER}
+      # POSTGRES_DB: 'test'
+      POSTGRES_DB: ${POSTGRES_DB}
+    networks:
+      - custom_net
+    volumes:
+      - db_data:/var/lib/postgresql/data
+networks:
+  custom_net:
+    driver: bridge
+volumes:
+  db_data:
