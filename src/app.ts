@@ -1,6 +1,7 @@
 import express from "express";
 import { stdout } from "process";
 import { PORT_NODE_HOST } from "./common/config";
+import {} from "typeorm";
 
 const app = express();
 app.use(express.json());

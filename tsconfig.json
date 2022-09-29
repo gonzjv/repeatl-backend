@@ -1,0 +1,21 @@
+{
+  // extends позволяет обогатить опции другими опциями из указанного файла
+  //   "extends": "./tsconfig-checks.json",
+
+  // в корне конфига находятся project-specific опции
+  "compilerOptions": {
+    // здесь все настройки, связанные с компилятором
+    "module": "CommonJS",
+    "esModuleInterop": true,
+    "target": "ES6",
+    "rootDir": "./",
+    "outDir": "./build",
+    "strict": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitAny": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}
