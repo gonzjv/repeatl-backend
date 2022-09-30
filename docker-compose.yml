@@ -2,6 +2,7 @@
 services:
   node:
     container_name: repeatl_node_container
+    image: repeatl_node
     build: .
     ports:
       - ${PORT_NODE_HOST}:${PORT_NODE_CONTAINER}
@@ -11,7 +12,8 @@ services:
     # links:
     #   - postgres
     environment:
-      PORT: 4000
+      - PORT=4000
+      # DATABASE_URL: postgres://username:pgpassword@postgres:5432/mydatabase
     networks:
       - custom_net
     deploy:
@@ -26,7 +28,7 @@ services:
   postgres:
     container_name: repeatl_pg_container
     build: ./database
-    image: "postgres"
+    image: 'repeatl_postgres'
     restart: always
     ports:
       - ${PORT_POSTGRES_HOST}:${PORT_POSTGRES_CONTAINER}

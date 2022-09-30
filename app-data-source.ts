@@ -1,14 +1,16 @@
 import { DataSource } from 'typeorm';
 import {
+  PORT_POSTGRES_HOST,
   POSTGRES_DB,
   POSTGRES_PASSWORD,
   POSTGRES_USER,
 } from './src/common/config';
 
-const repeatlDataSource = new DataSource({
+export const repeatlDataSource = new DataSource({
   type: 'postgres',
-  host: 'localhost',
-  port: 5000,
+  host: 'postgres',
+  port: Number(PORT_POSTGRES_HOST),
+  // port: 5432,
   //   username: "test",
   username: POSTGRES_USER,
   //   password: "test",
@@ -20,4 +22,4 @@ const repeatlDataSource = new DataSource({
   synchronize: true,
 });
 
-export default repeatlDataSource;
+// export default repeatlDataSource;
