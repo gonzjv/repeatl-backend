@@ -5,10 +5,10 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class User {
+export class User_by {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  firstName!: string;
+  first_Name!: string;
 }

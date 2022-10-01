@@ -18,6 +18,7 @@ export const repeatlDataSource = new DataSource({
   //   database: "test",
   database: POSTGRES_DB,
   entities: ['src/entity/*.js'],
+  migrations: ['src/migrations/*.ts'],
   logging: true,
   synchronize: true,
 });
