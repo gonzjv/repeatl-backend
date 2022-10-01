@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
-import { User_by } from '../entity/user.entity';
+import { User } from '../entity/user.entity';
 import { StatusCodes } from 'http-status-codes';
 
 const router = Router();
@@ -9,7 +9,7 @@ router.route('/').get(async (req, res) => {
   try {
     console.log(req);
     const users = await repeatlDataSource
-      .getRepository(User_by)
+      .getRepository(User)
       .find();
     res.json(users);
   } catch (error) {
@@ -21,10 +21,10 @@ router.route('/').post(async (req, res) => {
   try {
     console.log('body of usr is', req.body);
     const user = await repeatlDataSource
-      .getRepository(User_by)
+      .getRepository(User)
       .create(req.body);
     const results = await repeatlDataSource
-      .getRepository(User_by)
+      .getRepository(User)
       .save(user);
     return res
       .status(StatusCodes.OK)

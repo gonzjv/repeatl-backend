@@ -17,7 +17,7 @@ export const repeatlDataSource = new DataSource({
   password: POSTGRES_PASSWORD,
   //   database: "test",
   database: POSTGRES_DB,
-  entities: ['src/entity/*.js'],
+  entities: ['src/entity/*.ts'],
   migrations: ['src/migrations/*.ts'],
   logging: true,
   synchronize: true,
