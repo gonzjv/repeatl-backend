@@ -4,6 +4,8 @@ import { PORT_NODE_HOST } from './common/config';
 import {} from 'typeorm';
 import { repeatlDataSource } from '../app-data-source';
 import { userRouter } from './resources/user.router';
+import { courseRouter } from './resources/course.router';
+import { collectionRouter } from './resources/collection.router';
 
 // establish database connection
 repeatlDataSource
@@ -36,6 +38,8 @@ app.use(
 
 // register routes
 app.use('/users', userRouter);
+app.use('/courses', courseRouter);
+app.use('/collection', collectionRouter);
 // app.use('/boards', boardRouter);
 // app.use('/boards', taskRouter);
 // app.use(handleUserError);
