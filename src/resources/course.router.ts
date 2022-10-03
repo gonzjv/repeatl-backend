@@ -4,13 +4,18 @@ import { StatusCodes } from 'http-status-codes';
 import { Course } from '../entity/course.entity';
 
 const router = Router();
+const { manager } = repeatlDataSource;
 
-router.route('/').get(async (req, res) => {
+router.route('/').get(async (_, res) => {
   try {
-    console.log(req);
     const courses = await repeatlDataSource
       .getRepository(Course)
-      .find();
+      .find({
+        relations: {
+          collections: true,
+        },
+      });
+
     res.json(courses);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
@@ -20,12 +25,11 @@ router.route('/').get(async (req, res) => {
 router.route('/').post(async (req, res) => {
   try {
     console.log('body of course is', req.body);
-    const course = await repeatlDataSource
-      .getRepository(Course)
-      .create(req.body);
-    const results = await repeatlDataSource
-      .getRepository(Course)
-      .save(course);
+    const course = await manager.create(
+      Course,
+      req.body
+    );
+    const results = await manager.save(course);
     return res
       .status(StatusCodes.OK)
       .send(results);

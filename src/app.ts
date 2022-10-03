@@ -39,7 +39,7 @@ app.use(
 // register routes
 app.use('/users', userRouter);
 app.use('/courses', courseRouter);
-app.use('/collection', collectionRouter);
+app.use('/collections', collectionRouter);
 // app.use('/boards', boardRouter);
 // app.use('/boards', taskRouter);
 // app.use(handleUserError);
