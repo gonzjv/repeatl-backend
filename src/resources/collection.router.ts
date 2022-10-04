@@ -6,16 +6,18 @@ import { Course } from '../entity/course.entity';
 
 const router = Router();
 const { manager } = repeatlDataSource;
+const collectionRepo =
+  repeatlDataSource.getRepository(Collection);
 
 router.route('/').get(async (_, res) => {
   try {
-    const collections = await repeatlDataSource
-      .getRepository(Collection)
-      .find({
+    const collections = await collectionRepo.find(
+      {
         relations: {
           course: true,
         },
-      });
+      }
+    );
     res.json(collections);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
@@ -42,19 +44,6 @@ router.route('/').post(async (req, res) => {
     const results = await manager.save(
       collection
     );
-
-    const courses = await repeatlDataSource
-      .getRepository(Course)
-      .find({
-        relations: {
-          collections: true,
-        },
-      });
-
-    console.log('courses', courses);
-    // const results = await repeatlDataSource
-    //   .getRepository(Collection)
-    //   .save(collection);
     return res
       .status(StatusCodes.OK)
       .send(results);
@@ -64,5 +53,31 @@ router.route('/').post(async (req, res) => {
       .send(error);
   }
 });
+
+router
+  .route('/:collectionID')
+  .delete(async (req, res) => {
+    try {
+      const collectionToRemove =
+        await collectionRepo.findOneBy({
+          id: Number(req.params.collectionID),
+        });
+      if (collectionToRemove) {
+        await collectionRepo.remove(
+          collectionToRemove
+        );
+        return res
+          .status(StatusCodes.OK)
+          .send(collectionToRemove);
+      }
+      return res
+        .status(StatusCodes.NOT_ACCEPTABLE)
+        .send('collection is not exist');
+    } catch (error) {
+      res
+        .status(StatusCodes.BAD_REQUEST)
+        .send(error);
+    }
+  });
 
 export { router as collectionRouter };
