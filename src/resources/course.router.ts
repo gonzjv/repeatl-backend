@@ -4,7 +4,8 @@ import { StatusCodes } from 'http-status-codes';
 import { Course } from '../entity/course.entity';
 
 const router = Router();
-const { manager } = repeatlDataSource;
+const courseRepo =
+  repeatlDataSource.getRepository(Course);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -25,11 +26,8 @@ router.route('/').get(async (_, res) => {
 router.route('/').post(async (req, res) => {
   try {
     console.log('body of course is', req.body);
-    const course = await manager.create(
-      Course,
-      req.body
-    );
-    const results = await manager.save(course);
+    const course = courseRepo.create(req.body);
+    const results = await courseRepo.save(course);
     return res
       .status(StatusCodes.OK)
       .send(results);
@@ -39,5 +37,25 @@ router.route('/').post(async (req, res) => {
       .send(error);
   }
 });
+
+router
+  .route('/:courseId')
+  .delete(async (req, res) => {
+    try {
+      const courseToRemove =
+        await courseRepo.findOneBy({
+          id: Number(req.params.courseId),
+        });
+      courseToRemove &&
+        (await courseRepo.remove(courseToRemove));
+      return res
+        .status(StatusCodes.OK)
+        .send(courseToRemove);
+    } catch (error) {
+      res
+        .status(StatusCodes.NOT_ACCEPTABLE)
+        .send(error);
+    }
+  });
 
 export { router as courseRouter };
