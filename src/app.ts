@@ -6,6 +6,7 @@ import { repeatlDataSource } from '../app-data-source';
 import { userRouter } from './resources/user.router';
 import { courseRouter } from './resources/course.router';
 import { collectionRouter } from './resources/collection.router';
+import cors from 'cors';
 
 // establish database connection
 repeatlDataSource
@@ -24,6 +25,8 @@ repeatlDataSource
 
 // create and setup express app
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 app.use(
   '/',

@@ -17,5 +17,7 @@
     "noImplicitAny": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
-  }
+  },
+  "include": ["src/**/*.d.ts", "src/**/*.ts"],
+  "exclude": ["node_modules", "**/node_modules"]
 }
