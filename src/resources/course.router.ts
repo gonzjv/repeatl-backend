@@ -9,13 +9,11 @@ const courseRepo =
 
 router.route('/').get(async (_, res) => {
   try {
-    const courses = await repeatlDataSource
-      .getRepository(Course)
-      .find({
-        relations: {
-          collections: true,
-        },
-      });
+    const courses = await courseRepo.find({
+      relations: {
+        collections: true,
+      },
+    });
 
     res.json(courses);
   } catch (error) {

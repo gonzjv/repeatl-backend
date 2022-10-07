@@ -5,9 +5,10 @@ import { Collection } from '../entity/collection.entity';
 import { Course } from '../entity/course.entity';
 
 const router = Router();
-const { manager } = repeatlDataSource;
 const collectionRepo =
   repeatlDataSource.getRepository(Collection);
+const courseRepo =
+  repeatlDataSource.getRepository(Course);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -24,35 +25,54 @@ router.route('/').get(async (_, res) => {
   }
 });
 
-router.route('/').post(async (req, res) => {
-  try {
-    const course = await manager.findOneBy(
-      Course,
-      {
-        id: 2,
-      }
-    );
+router
+  .route('/:courseId')
+  .get(async (req, res) => {
+    try {
+      const collections =
+        await collectionRepo.find({
+          relations: {
+            course: true,
+          },
+          where: {
+            course: {
+              id: Number(req.params.courseId),
+            },
+          },
+        });
+      res.json(collections);
+    } catch (error) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .send(error);
+    }
+  });
 
-    const collection = manager.create(
-      Collection,
-      {
+router
+  .route('/:courseId')
+  .post(async (req, res) => {
+    try {
+      const course = await courseRepo.findOneBy({
+        id: Number(req.params.courseId),
+      });
+
+      const collection = collectionRepo.create({
         name: req.body.name,
         course: course!,
-      }
-    );
+      });
 
-    const results = await manager.save(
-      collection
-    );
-    return res
-      .status(StatusCodes.OK)
-      .send(results);
-  } catch (error) {
-    res
-      .status(StatusCodes.NOT_ACCEPTABLE)
-      .send(error);
-  }
-});
+      const results = await collectionRepo.save(
+        collection
+      );
+      return res
+        .status(StatusCodes.OK)
+        .send(results);
+    } catch (error) {
+      res
+        .status(StatusCodes.NOT_ACCEPTABLE)
+        .send(error);
+    }
+  });
 
 router
   .route('/:collectionID')
