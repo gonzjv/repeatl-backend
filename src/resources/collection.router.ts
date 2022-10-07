@@ -16,6 +16,7 @@ router.route('/').get(async (_, res) => {
       {
         relations: {
           course: true,
+          modelSubCollections: true,
         },
       }
     );

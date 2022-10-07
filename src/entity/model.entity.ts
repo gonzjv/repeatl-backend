@@ -2,30 +2,34 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Course } from './course.entity';
 import { ModelSubCollection } from './modelSubCollection.entity';
 
 @Entity()
-export class Collection {
+export class Model {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column()
-  name!: string;
+  label!: string;
+
+  @Column()
+  phrase1!: string;
+
+  @Column()
+  phrase2!: string;
+
+  @Column()
+  phrase3!: string;
+
+  @Column()
+  number!: number;
 
   @ManyToOne(
-    () => Course,
-    (course) => course.collections
-  )
-  course!: Course;
-
-  @OneToMany(
     () => ModelSubCollection,
     (modelSubCollection) =>
-      modelSubCollection.collection
+      modelSubCollection.models
   )
-  modelSubCollections!: ModelSubCollection[];
+  modelSubCollection!: ModelSubCollection;
 }

@@ -7,6 +7,7 @@ import { userRouter } from './resources/user.router';
 import { courseRouter } from './resources/course.router';
 import { collectionRouter } from './resources/collection.router';
 import cors from 'cors';
+import { modelSubCollectionRouter } from './resources/modelSubCollection.router';
 
 // establish database connection
 repeatlDataSource
@@ -43,6 +44,10 @@ app.use(
 app.use('/users', userRouter);
 app.use('/courses', courseRouter);
 app.use('/collections', collectionRouter);
+app.use(
+  '/modelSubCollections',
+  modelSubCollectionRouter
+);
 // app.use('/boards', boardRouter);
 // app.use('/boards', taskRouter);
 // app.use(handleUserError);
