@@ -34,6 +34,7 @@ router
         await collectionRepo.find({
           relations: {
             course: true,
+            modelSubCollections: true,
           },
           where: {
             course: {
