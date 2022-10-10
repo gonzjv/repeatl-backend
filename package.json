@@ -1,0 +1,37 @@
+{
+  "name": "repeatl-backend",
+  "version": "1.0.0",
+  "description": "Backend app  with PostgreSQL and Express",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon --exitcrash",
+    "start": "ts-node src/app.ts",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typeorm": "typeorm-ts-node-esm -d ./app-data-source.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonzjv/repeatl-backend.git"
+  },
+  "author": "gonzjv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gonzjv/repeatl-backend/issues"
+  },
+  "homepage": "https://github.com/gonzjv/repeatl-backend#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.2",
+    "express": "^4.18.1",
+    "http-status-codes": "^2.2.0",
+    "pg": "^8.8.0",
+    "reflect-metadata": "^0.1.13",
+    "typeorm": "^0.3.10"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.14",
+    "@types/node": "^18.7.23",
+    "nodemon": "^2.0.20"
+  }
+}
