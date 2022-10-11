@@ -1,8 +1,9 @@
 import {
   Column,
   Entity,
-  ManyToOne,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Collection } from './collection.entity';
@@ -16,10 +17,11 @@ export class ModelSubCollection {
   @Column()
   label!: string;
 
-  @ManyToOne(
+  @OneToOne(
     () => Collection,
-    (collection) => collection.modelSubCollections
+    (collection) => collection.modelSubCollection
   )
+  @JoinColumn()
   collection!: Collection;
 
   @OneToMany(
