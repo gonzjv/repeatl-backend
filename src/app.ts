@@ -11,7 +11,6 @@ import { modelSubCollectionRouter } from './resources/modelSubCollection.router'
 import { modelRouter } from './resources/model.router';
 
 // establish database connection
-console.log('dataSource', repeatlDataSource);
 repeatlDataSource
   .initialize()
   .then(() => {
