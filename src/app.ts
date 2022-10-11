@@ -11,6 +11,7 @@ import { modelSubCollectionRouter } from './resources/modelSubCollection.router'
 import { modelRouter } from './resources/model.router';
 
 // establish database connection
+console.log('dataSource', repeatlDataSource);
 repeatlDataSource
   .initialize()
   .then(() => {
@@ -56,6 +57,6 @@ app.use('/models', modelRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(
-    `Where connection to postgres???? App is running on http://localhost:${PORT_NODE_HOST} \n`
+    `App is running on http://localhost:${PORT_NODE_HOST} \n`
   );
 });
