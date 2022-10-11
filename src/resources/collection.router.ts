@@ -16,7 +16,7 @@ router.route('/').get(async (_, res) => {
       {
         relations: {
           course: true,
-          modelSubCollections: true,
+          modelSubCollection: true,
         },
       }
     );
@@ -34,7 +34,7 @@ router
         await collectionRepo.find({
           relations: {
             course: true,
-            modelSubCollections: true,
+            modelSubCollection: true,
           },
           where: {
             course: {

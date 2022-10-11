@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   ManyToOne,
-  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Course } from './course.entity';
@@ -22,10 +22,10 @@ export class Collection {
   )
   course!: Course;
 
-  @OneToMany(
+  @OneToOne(
     () => ModelSubCollection,
     (modelSubCollection) =>
       modelSubCollection.collection
   )
-  modelSubCollections!: ModelSubCollection[];
+  modelSubCollection!: ModelSubCollection;
 }
