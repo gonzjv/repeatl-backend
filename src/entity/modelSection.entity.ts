@@ -17,7 +17,7 @@ export class ModelSection {
   label!: string;
 
   @Column()
-  number!: string;
+  number!: number;
 
   @ManyToOne(
     () => ModelSubCollection,
