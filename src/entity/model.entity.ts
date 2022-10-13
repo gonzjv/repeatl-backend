@@ -4,7 +4,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ModelSubCollection } from './modelSubCollection.entity';
+import { ModelSection } from './modelSection.entity';
 
 @Entity()
 export class Model {
@@ -27,9 +27,14 @@ export class Model {
   number!: number;
 
   @ManyToOne(
-    () => ModelSubCollection,
-    (modelSubCollection) =>
-      modelSubCollection.models
+    () => ModelSection,
+    (modelSection) => modelSection.models
   )
-  modelSubCollection!: ModelSubCollection;
+  modelSection!: ModelSection;
+  // @ManyToOne(
+  //   () => ModelSubCollection,
+  //   (modelSubCollection) =>
+  //     modelSubCollection.models
+  // )
+  // modelSubCollection!: ModelSubCollection;
 }

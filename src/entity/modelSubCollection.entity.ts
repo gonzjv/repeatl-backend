@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Collection } from './collection.entity';
-import { Model } from './model.entity';
+import { ModelSection } from './modelSection.entity';
 
 @Entity()
 export class ModelSubCollection {
@@ -25,8 +25,14 @@ export class ModelSubCollection {
   collection!: Collection;
 
   @OneToMany(
-    () => Model,
-    (model) => model.modelSubCollection
+    () => ModelSection,
+    (modelSection) =>
+      modelSection.modelSubCollection
   )
-  models!: Model[];
+  modelSections!: ModelSection[];
+  // @OneToMany(
+  //   () => Model,
+  //   (model) => model.modelSubCollection
+  // )
+  // models!: Model[];
 }

@@ -2,48 +2,50 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { ModelSubCollection } from '../entity/modelSubCollection.entity';
-import { Collection } from '../entity/collection.entity';
+import { ModelSection } from '../entity/modelSection.entity';
 
 const router = Router();
 const modelSubCollectionRepo =
   repeatlDataSource.getRepository(
     ModelSubCollection
   );
-const collectionRepo =
-  repeatlDataSource.getRepository(Collection);
+const modelSectionRepo =
+  repeatlDataSource.getRepository(ModelSection);
 
 router.route('/').get(async (_, res) => {
   try {
-    const modelSubCollections =
-      await modelSubCollectionRepo.find({
+    const modelSections =
+      await modelSectionRepo.find({
         relations: {
-          collection: true,
-          modelSections: true,
+          modelSubCollection: true,
+          models: true,
         },
       });
-    res.json(modelSubCollections);
+    res.json(modelSections);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
   }
 });
 
 router
-  .route('/:collectionId')
+  .route('/:modelSubCollectionId')
   .get(async (req, res) => {
     try {
-      const modelSubcollections =
-        await modelSubCollectionRepo.find({
+      const modelSections =
+        await modelSectionRepo.find({
           relations: {
-            collection: true,
-            modelSections: true,
+            modelSubCollection: true,
+            models: true,
           },
           where: {
-            collection: {
-              id: Number(req.params.collectionId),
+            modelSubCollection: {
+              id: Number(
+                req.params.modelSubCollectionId
+              ),
             },
           },
         });
-      res.json(modelSubcollections);
+      res.json(modelSections);
     } catch (error) {
       res
         .status(StatusCodes.NOT_FOUND)
@@ -52,24 +54,26 @@ router
   });
 
 router
-  .route('/:collectionId')
+  .route('/:modelSubCollectionId')
   .post(async (req, res) => {
     try {
-      const collection =
-        await collectionRepo.findOneBy({
-          id: Number(req.params.collectionId),
-        });
-
       const modelSubCollection =
-        modelSubCollectionRepo.create({
-          label: req.body.label,
-          collection: collection!,
+        await modelSubCollectionRepo.findOneBy({
+          id: Number(
+            req.params.modelSubCollectionId
+          ),
         });
 
-      const results =
-        await modelSubCollectionRepo.save(
-          modelSubCollection
-        );
+      const modelSection =
+        modelSectionRepo.create({
+          label: req.body.label,
+          number: req.body.number,
+          modelSubCollection: modelSubCollection!,
+        });
+
+      const results = await modelSectionRepo.save(
+        modelSection
+      );
       return res
         .status(StatusCodes.OK)
         .send(results);
@@ -83,20 +87,18 @@ router
 router.route('/:id').delete(async (req, res) => {
   try {
     const elemToRemove =
-      await modelSubCollectionRepo.findOneBy({
+      await modelSectionRepo.findOneBy({
         id: Number(req.params.id),
       });
     if (elemToRemove) {
-      await modelSubCollectionRepo.remove(
-        elemToRemove
-      );
+      await modelSectionRepo.remove(elemToRemove);
       return res
         .status(StatusCodes.OK)
         .send(elemToRemove);
     }
     return res
       .status(StatusCodes.NOT_ACCEPTABLE)
-      .send('modelSubCollection is not exist');
+      .send('modelSection is not exist');
   } catch (error) {
     res
       .status(StatusCodes.BAD_REQUEST)
@@ -104,4 +106,4 @@ router.route('/:id').delete(async (req, res) => {
   }
 });
 
-export { router as modelSubCollectionRouter };
+export { router as modelSectionRouter };

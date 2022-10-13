@@ -17,7 +17,7 @@ router.route('/').get(async (_, res) => {
         relations: {
           course: true,
           modelSubCollection: {
-            models: true,
+            modelSections: true,
           },
         },
       }
@@ -37,7 +37,7 @@ router
           relations: {
             course: true,
             modelSubCollection: {
-              models: true,
+              modelSections: true,
             },
           },
           where: {

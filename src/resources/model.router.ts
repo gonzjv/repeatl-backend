@@ -2,21 +2,19 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Model } from '../entity/model.entity';
-import { ModelSubCollection } from '../entity/modelSubCollection.entity';
+import { ModelSection } from '../entity/modelSection.entity';
 
 const router = Router();
 const modelRepo =
   repeatlDataSource.getRepository(Model);
-const modelSubCollectionRepo =
-  repeatlDataSource.getRepository(
-    ModelSubCollection
-  );
+const modelSectionRepo =
+  repeatlDataSource.getRepository(ModelSection);
 
 router.route('/').get(async (_, res) => {
   try {
     const model = await modelRepo.find({
       relations: {
-        modelSubCollection: true,
+        modelSection: true,
       },
     });
     res.json(model);
@@ -26,18 +24,16 @@ router.route('/').get(async (_, res) => {
 });
 
 router
-  .route('/:modelSubCollectionId')
+  .route('/:modelSectionId')
   .get(async (req, res) => {
     try {
       const models = await modelRepo.find({
         relations: {
-          modelSubCollection: true,
+          modelSection: true,
         },
         where: {
-          modelSubCollection: {
-            id: Number(
-              req.params.modelSubCollectionId
-            ),
+          modelSection: {
+            id: Number(req.params.modelSectionId),
           },
         },
       });
@@ -50,14 +46,12 @@ router
   });
 
 router
-  .route('/:modelSubCollectionId')
+  .route('/:modelSectionId')
   .post(async (req, res) => {
     try {
-      const modelSubCollection =
-        await modelSubCollectionRepo.findOneBy({
-          id: Number(
-            req.params.modelSubCollectionId
-          ),
+      const modelSection =
+        await modelSectionRepo.findOneBy({
+          id: Number(req.params.modelSectionId),
         });
 
       const model = modelRepo.create({
@@ -66,7 +60,7 @@ router
         phrase2: req.body.phrase2,
         phrase3: req.body.phrase3,
         number: req.body.number,
-        modelSubCollection: modelSubCollection!,
+        modelSection: modelSection!,
       });
 
       const results = await modelRepo.save(model);
