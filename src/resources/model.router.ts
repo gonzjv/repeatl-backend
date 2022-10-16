@@ -56,9 +56,12 @@ router
 
       const model = modelRepo.create({
         label: req.body.label,
-        phrase1: req.body.phrase1,
-        phrase2: req.body.phrase2,
-        phrase3: req.body.phrase3,
+        phraseNative1: req.body.phraseNative1,
+        phraseNative2: req.body.phraseNative2,
+        phraseNative3: req.body.phraseNative3,
+        phraseForeign1: req.body.phraseForeign1,
+        phraseForeign2: req.body.phraseForeign2,
+        phraseForeign3: req.body.phraseForeign3,
         number: req.body.number,
         modelSection: modelSection!,
       });

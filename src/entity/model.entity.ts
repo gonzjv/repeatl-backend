@@ -15,13 +15,22 @@ export class Model {
   label!: string;
 
   @Column()
-  phrase1!: string;
+  phraseNative1!: string;
 
   @Column()
-  phrase2!: string;
+  phraseNative2!: string;
 
   @Column()
-  phrase3!: string;
+  phraseNative3!: string;
+
+  @Column()
+  phraseForeign1!: string;
+
+  @Column()
+  phraseForeign2!: string;
+
+  @Column()
+  phraseForeign3!: string;
 
   @Column()
   number!: number;
@@ -31,10 +40,4 @@ export class Model {
     (modelSection) => modelSection.models
   )
   modelSection!: ModelSection;
-  // @ManyToOne(
-  //   () => ModelSubCollection,
-  //   (modelSubCollection) =>
-  //     modelSubCollection.models
-  // )
-  // modelSubCollection!: ModelSubCollection;
 }
