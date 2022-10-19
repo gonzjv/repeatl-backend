@@ -30,9 +30,4 @@ export class ModelSubCollection {
       modelSection.modelSubCollection
   )
   modelSections!: ModelSection[];
-  // @OneToMany(
-  //   () => Model,
-  //   (model) => model.modelSubCollection
-  // )
-  // models!: Model[];
 }

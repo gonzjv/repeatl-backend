@@ -2,42 +2,42 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Model } from '../entity/model.entity';
-import { ModelSection } from '../entity/modelSection.entity';
+import { Phrase } from '../entity/phrase.entity';
 
 const router = Router();
 const modelRepo =
   repeatlDataSource.getRepository(Model);
-const modelSectionRepo =
-  repeatlDataSource.getRepository(ModelSection);
+const phraseRepo =
+  repeatlDataSource.getRepository(Phrase);
 
 router.route('/').get(async (_, res) => {
   try {
-    const model = await modelRepo.find({
+    const phrase = await phraseRepo.find({
       relations: {
-        modelSection: true,
+        model: true,
       },
     });
-    res.json(model);
+    res.json(phrase);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
   }
 });
 
 router
-  .route('/:modelSectionId')
+  .route('/:modelId')
   .get(async (req, res) => {
     try {
-      const models = await modelRepo.find({
+      const phrases = await phraseRepo.find({
         relations: {
-          modelSection: true,
+          model: true,
         },
         where: {
-          modelSection: {
-            id: Number(req.params.modelSectionId),
+          model: {
+            id: Number(req.params.modelId),
           },
         },
       });
-      res.json(models);
+      res.json(phrases);
     } catch (error) {
       res
         .status(StatusCodes.NOT_FOUND)
@@ -46,22 +46,23 @@ router
   });
 
 router
-  .route('/:modelSectionId')
+  .route('/:modelId')
   .post(async (req, res) => {
     try {
-      const modelSection =
-        await modelSectionRepo.findOneBy({
-          id: Number(req.params.modelSectionId),
-        });
-
-      const model = modelRepo.create({
-        label: req.body.label,
-        grammarSubject: req.body.grammarSubject,
-        number: req.body.number,
-        modelSection: modelSection!,
+      const model = await modelRepo.findOneBy({
+        id: Number(req.params.modelId),
       });
 
-      const results = await modelRepo.save(model);
+      const phrase = phraseRepo.create({
+        label: req.body.label,
+        native: req.body.native,
+        foreign: req.body.foreign,
+        model: model!,
+      });
+
+      const results = await phraseRepo.save(
+        phrase
+      );
       return res
         .status(StatusCodes.OK)
         .send(results);
@@ -75,11 +76,11 @@ router
 router.route('/:id').delete(async (req, res) => {
   try {
     const elemToRemove =
-      await modelRepo.findOneBy({
+      await phraseRepo.findOneBy({
         id: Number(req.params.id),
       });
     if (elemToRemove) {
-      await modelRepo.remove(elemToRemove);
+      await phraseRepo.remove(elemToRemove);
       return res
         .status(StatusCodes.OK)
         .send(elemToRemove);
@@ -94,4 +95,4 @@ router.route('/:id').delete(async (req, res) => {
   }
 });
 
-export { router as modelRouter };
+export { router as phraseRouter };
