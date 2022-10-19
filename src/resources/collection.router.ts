@@ -18,7 +18,9 @@ router.route('/').get(async (_, res) => {
           course: true,
           modelSubCollection: {
             modelSections: {
-              models: true,
+              models: {
+                phrases: true,
+              },
             },
           },
         },
@@ -40,7 +42,7 @@ router
             course: true,
             modelSubCollection: {
               modelSections: {
-                models: true,
+                models: { phrases: true },
               },
             },
           },
