@@ -48,7 +48,11 @@ router
           e.subCollectionId ==
           Number(subCollectionId)
       );
-      res.json(progress);
+      progress && res.json(progress);
+      !progress &&
+        res
+          .status(StatusCodes.NOT_FOUND)
+          .json('progress not found');
     } catch (error) {
       res
         .status(StatusCodes.NOT_FOUND)
