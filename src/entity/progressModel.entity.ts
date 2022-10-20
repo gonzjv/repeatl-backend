@@ -20,6 +20,9 @@ export class ProgressModel {
   @Column()
   modelStep!: number;
 
+  @Column()
+  phraseStep!: number;
+
   @ManyToOne(
     () => User,
     (user) => user.progressModels
