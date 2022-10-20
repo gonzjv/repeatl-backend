@@ -1,28 +1,29 @@
 import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
-import { Model } from '../entity/model.entity';
-import { Phrase } from '../entity/phrase.entity';
 import { ProgressModel } from '../entity/progressModel.entity';
+import { User } from '../entity/user.entity';
 
 const router = Router();
-const modelRepo =
-  repeatlDataSource.getRepository(Model);
+const userRepo =
+  repeatlDataSource.getRepository(User);
 const progressModelRepo =
   repeatlDataSource.getRepository(ProgressModel);
 
-// router.route('/').get(async (_, res) => {
-//   try {
-//     const phrase = await phraseRepo.find({
-//       relations: {
-//         model: true,
-//       },
-//     });
-//     res.json(phrase);
-//   } catch (error) {
-//     res.status(StatusCodes.NOT_FOUND).send(error);
-//   }
-// });
+router.route('/').get(async (_, res) => {
+  try {
+    const progress = await progressModelRepo.find(
+      {
+        relations: {
+          user: true,
+        },
+      }
+    );
+    res.json(progress);
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).send(error);
+  }
+});
 
 router
   .route('/:userId.:subCollectionId')
@@ -33,7 +34,7 @@ router
       const progressArr =
         await progressModelRepo.find({
           // relations: {
-          //   model: true,
+          //   user: true,
           // },
           where: {
             user: {
@@ -55,33 +56,71 @@ router
     }
   });
 
-// router
-//   .route('/:modelId')
-//   .post(async (req, res) => {
-//     try {
-//       const model = await modelRepo.findOneBy({
-//         id: Number(req.params.modelId),
-//       });
+router.route('/').post(async (req, res) => {
+  const {
+    userId,
+    modelStep,
+    phraseStep,
+    sectionStep,
+    subCollectionId,
+  } = req.body;
+  try {
+    const user = await userRepo.findOneBy({
+      id: userId,
+    });
 
-//       const phrase = phraseRepo.create({
-//         label: req.body.label,
-//         native: req.body.native,
-//         foreign: req.body.foreign,
-//         model: model!,
-//       });
+    const progress = progressModelRepo.create({
+      modelStep: modelStep,
+      phraseStep: phraseStep,
+      sectionStep: sectionStep,
+      subCollectionId: subCollectionId,
+      user: user!,
+    });
 
-//       const results = await phraseRepo.save(
-//         phrase
-//       );
-//       return res
-//         .status(StatusCodes.OK)
-//         .send(results);
-//     } catch (error) {
-//       res
-//         .status(StatusCodes.NOT_ACCEPTABLE)
-//         .send(error);
-//     }
-//   });
+    const results = await progressModelRepo.save(
+      progress
+    );
+    return res
+      .status(StatusCodes.OK)
+      .send(results);
+  } catch (error) {
+    res
+      .status(StatusCodes.NOT_ACCEPTABLE)
+      .send(error);
+  }
+});
+
+router.route('/').put(async (req, res) => {
+  const {
+    id,
+    modelStep,
+    phraseStep,
+    sectionStep,
+  } = req.body;
+  try {
+    const elementToUpdate =
+      await progressModelRepo.findOneBy({
+        id: id,
+      });
+
+    elementToUpdate!.modelStep = modelStep;
+    elementToUpdate!.phraseStep = phraseStep;
+    elementToUpdate!.sectionStep = sectionStep;
+
+    const results =
+      elementToUpdate &&
+      (await progressModelRepo.save(
+        elementToUpdate
+      ));
+    return res
+      .status(StatusCodes.OK)
+      .send(results);
+  } catch (error) {
+    res
+      .status(StatusCodes.NOT_ACCEPTABLE)
+      .send(error);
+  }
+});
 
 // router.route('/:id').delete(async (req, res) => {
 //   try {
