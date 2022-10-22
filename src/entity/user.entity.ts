@@ -1,8 +1,10 @@
 import {
   Column,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { ProgressModel } from './progressModel.entity';
 
 @Entity()
 export class User {
@@ -10,5 +12,14 @@ export class User {
   id!: number;
 
   @Column()
-  first_name!: string;
+  firstName!: string;
+
+  @Column()
+  lastName!: string;
+
+  @OneToMany(
+    () => ProgressModel,
+    (progress) => progress.user
+  )
+  progressModels!: ProgressModel[];
 }

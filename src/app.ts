@@ -9,6 +9,9 @@ import { collectionRouter } from './resources/collection.router';
 import cors from 'cors';
 import { modelSubCollectionRouter } from './resources/modelSubCollection.router';
 import { modelRouter } from './resources/model.router';
+import { modelSectionRouter } from './resources/modelSection.router';
+import { phraseRouter } from './resources/phrase.router';
+import { progressModelRouter } from './resources/progressModel.router';
 
 // establish database connection
 repeatlDataSource
@@ -49,10 +52,10 @@ app.use(
   '/modelSubCollections',
   modelSubCollectionRouter
 );
+app.use('/modelSections', modelSectionRouter);
 app.use('/models', modelRouter);
-// app.use('/boards', boardRouter);
-// app.use('/boards', taskRouter);
-// app.use(handleUserError);
+app.use('/phrases', phraseRouter);
+app.use('/progressModels', progressModelRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(

@@ -2,9 +2,11 @@ import {
   Column,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { ModelSubCollection } from './modelSubCollection.entity';
+import { ModelSection } from './modelSection.entity';
+import { Phrase } from './phrase.entity';
 
 @Entity()
 export class Model {
@@ -15,21 +17,20 @@ export class Model {
   label!: string;
 
   @Column()
-  phrase1!: string;
-
-  @Column()
-  phrase2!: string;
-
-  @Column()
-  phrase3!: string;
+  grammarSubject!: string;
 
   @Column()
   number!: number;
 
   @ManyToOne(
-    () => ModelSubCollection,
-    (modelSubCollection) =>
-      modelSubCollection.models
+    () => ModelSection,
+    (modelSection) => modelSection.models
   )
-  modelSubCollection!: ModelSubCollection;
+  modelSection!: ModelSection;
+
+  @OneToMany(
+    () => Phrase,
+    (phrase) => phrase.model
+  )
+  phrases!: Phrase[];
 }
