@@ -2,6 +2,8 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { User } from '../entity/user.entity';
 import { StatusCodes } from 'http-status-codes';
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET_KEY } from '../common/config';
 
 const router = Router();
 const userRepo =
@@ -23,6 +25,42 @@ router.route('/').post(async (req, res) => {
     return res
       .status(StatusCodes.OK)
       .send(results);
+  } catch (error) {
+    res
+      .status(StatusCodes.NOT_ACCEPTABLE)
+      .send(error);
+  }
+});
+
+router.route('/login').post(async (req, res) => {
+  try {
+    const user = await userRepo.findOneBy({
+      email: req.body.email,
+    });
+    if (
+      !user ||
+      user.email !== req.body.email ||
+      user.password !== req.body.password
+    ) {
+      return res
+        .status(StatusCodes.UNAUTHORIZED)
+        .send({
+          success: false,
+          message:
+            'Bad username/password combination',
+        });
+    }
+    const payload = {
+      sub: user.id,
+      email: user.email,
+    };
+    const token = jwt.sign(
+      payload,
+      JWT_SECRET_KEY!,
+      { expiresIn: '1h' }
+    );
+
+    return res.status(StatusCodes.OK).json(token);
   } catch (error) {
     res
       .status(StatusCodes.NOT_ACCEPTABLE)
