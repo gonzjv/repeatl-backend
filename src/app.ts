@@ -1,4 +1,6 @@
-import express from 'express';
+import express from // Request, // NextFunction,
+// Response,
+'express';
 import { stdout } from 'process';
 import { PORT_NODE_HOST } from './common/config';
 import {} from 'typeorm';
@@ -12,6 +14,9 @@ import { modelRouter } from './resources/model.router';
 import { modelSectionRouter } from './resources/modelSection.router';
 import { phraseRouter } from './resources/phrase.router';
 import { progressModelRouter } from './resources/progressModel.router';
+import { checkToken } from './common/helpers';
+// import { checkToken } from './common/helpers';
+// import { StatusCodes } from 'http-status-codes';
 
 // establish database connection
 repeatlDataSource
@@ -44,9 +49,25 @@ app.use(
   }
 );
 
+//checking token
+// app.use(
+//   (
+//     req: Request,
+//     res: Response,
+//     next: NextFunction
+//   ) => {
+//     if (checkToken(req)) {
+//       return next();
+//     }
+//     res
+//       .status(StatusCodes.UNAUTHORIZED)
+//       .end('invalid token');
+//   }
+// );
+
 // register routes
 app.use('/users', userRouter);
-app.use('/courses', courseRouter);
+app.use('/courses', checkToken, courseRouter);
 app.use('/collections', collectionRouter);
 app.use(
   '/modelSubCollections',
