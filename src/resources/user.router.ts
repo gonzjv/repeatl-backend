@@ -60,7 +60,13 @@ router.route('/login').post(async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    return res.status(StatusCodes.OK).json(token);
+    const userData = {
+      email: user.email,
+      token: token,
+    };
+    return res
+      .status(StatusCodes.OK)
+      .json(userData);
   } catch (error) {
     res
       .status(StatusCodes.NOT_ACCEPTABLE)
