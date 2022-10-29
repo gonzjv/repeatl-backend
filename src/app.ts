@@ -1,6 +1,4 @@
-import express from // Request, // NextFunction,
-// Response,
-'express';
+import express from 'express'; // Response, // Request, // NextFunction,
 import { stdout } from 'process';
 import { PORT_NODE_HOST } from './common/config';
 import {} from 'typeorm';
@@ -68,18 +66,31 @@ app.use(
 // register routes
 app.use('/users', userRouter);
 app.use('/courses', checkToken, courseRouter);
-app.use('/collections', collectionRouter);
+app.use(
+  '/collections',
+  checkToken,
+  collectionRouter
+);
 app.use(
   '/modelSubCollections',
+  checkToken,
   modelSubCollectionRouter
 );
-app.use('/modelSections', modelSectionRouter);
-app.use('/models', modelRouter);
-app.use('/phrases', phraseRouter);
-app.use('/progressModels', progressModelRouter);
+app.use(
+  '/modelSections',
+  checkToken,
+  modelSectionRouter
+);
+app.use('/models', checkToken, modelRouter);
+app.use('/phrases', checkToken, phraseRouter);
+app.use(
+  '/progressModels',
+  checkToken,
+  progressModelRouter
+);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(
-    `Where connection to postgres???? App is running on http://localhost:${PORT_NODE_HOST} \n`
+    `App is running on http://localhost:${PORT_NODE_HOST} \n`
   );
 });
