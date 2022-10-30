@@ -12,10 +12,13 @@ export class User {
   id!: number;
 
   @Column()
-  firstName!: string;
+  email!: string;
 
   @Column()
-  lastName!: string;
+  password!: string;
+
+  @Column()
+  role!: string;
 
   @OneToMany(
     () => ProgressModel,
