@@ -61,6 +61,7 @@ router.route('/login').post(async (req, res) => {
     );
 
     const userData = {
+      id: user.id,
       email: user.email,
       token: token,
     };
