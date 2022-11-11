@@ -61,6 +61,37 @@ router
   });
 
 router
+  .route('/id/:collectionId')
+  .get(async (req, res) => {
+    try {
+      const collection =
+        await collectionRepo.findOne({
+          where: {
+            id: Number(req.params.collectionId),
+          },
+          relations: {
+            modelSubCollection: {
+              modelSections: true,
+            },
+          },
+          // relations: {
+          //   course: true,
+          //   modelSubCollection: {
+          //     modelSections: {
+          //       models: { phrases: true },
+          //     },
+          //   },
+          // },
+        });
+      res.json(collection);
+    } catch (error) {
+      res
+        .status(StatusCodes.NOT_FOUND)
+        .send(error);
+    }
+  });
+
+router
   .route('/:courseId')
   .post(async (req, res) => {
     try {
