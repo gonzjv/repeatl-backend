@@ -3,6 +3,31 @@ import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Model } from '../entity/model.entity';
 import { Phrase } from '../entity/phrase.entity';
+import multer from 'multer';
+import path from 'path';
+// import * as fs from 'node:fs';
+// import path from 'node:path';
+import csvToJson from 'csvtojson';
+
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (_, file, callback) => {
+    callback(
+      null,
+      Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+// const upload = multer({
+//   dest: 'uploads/',
+// });
+
+const upload = multer({
+  storage: storage,
+});
 
 const router = Router();
 const modelRepo =
@@ -94,5 +119,54 @@ router.route('/:id').delete(async (req, res) => {
       .send(error);
   }
 });
+
+router
+  .route('/upload/csv')
+  .post(
+    upload.single('csvFile'),
+    async (req, res) => {
+      try {
+        console.log('req.file', req.file);
+
+        // if (req.file?.path) {
+        //   let data = fs.createReadStream(
+        //     req.file.path,
+        //     'utf8'
+        //   );
+        //   console.log('data', data);
+        // }
+
+        const csvFilePath = `${req.file?.path}`;
+
+        // const file = path.resolve(
+        //   `${req.file?.path}`
+        // );
+
+        console.log('file', csvFilePath);
+        // console.log(
+        //   'isFile?',
+        //   fs.lstatSync(csvFilePath).isFile()
+        // );
+
+        const data = await csvToJson().fromFile(
+          csvFilePath
+        );
+        console.log('data', data);
+
+        // repeatlDataSource.manager.query(
+        //   `COPY phrase FROM '${file}' DELIMITER ',' CSV HEADER;`
+        // );
+
+        return res.status(StatusCodes.OK).send({
+          success: true,
+          msg: 'data is saved into DB',
+        });
+      } catch (error) {
+        res
+          .status(StatusCodes.NOT_ACCEPTABLE)
+          .send(error);
+      }
+    }
+  );
 
 export { router as phraseRouter };
