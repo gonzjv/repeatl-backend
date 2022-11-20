@@ -5,13 +5,13 @@ import { Model } from '../entity/model.entity';
 import { Phrase } from '../entity/phrase.entity';
 import multer from 'multer';
 import path from 'path';
-// import * as fs from 'node:fs';
+import * as fs from 'node:fs';
 // import path from 'node:path';
 import csvToJson from 'csvtojson';
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
-    cb(null, 'uploads/');
+    cb(null, __dirname);
   },
   filename: (_, file, callback) => {
     callback(
@@ -121,42 +121,57 @@ router.route('/:id').delete(async (req, res) => {
 });
 
 router
-  .route('/upload/csv')
+  .route('/upload/csv/:modelId')
   .post(
     upload.single('csvFile'),
     async (req, res) => {
       try {
-        console.log('req.file', req.file);
-
-        // if (req.file?.path) {
-        //   let data = fs.createReadStream(
-        //     req.file.path,
-        //     'utf8'
-        //   );
-        //   console.log('data', data);
-        // }
+        // console.log('req.file', req.file);
 
         const csvFilePath = `${req.file?.path}`;
+        console.log('file', csvFilePath);
 
-        // const file = path.resolve(
+        // const fileTest = path.resolve(
         //   `${req.file?.path}`
         // );
 
-        console.log('file', csvFilePath);
         // console.log(
         //   'isFile?',
         //   fs.lstatSync(csvFilePath).isFile()
         // );
 
-        const data = await csvToJson().fromFile(
-          csvFilePath
-        );
-        console.log('data', data);
+        const csvRowsArr =
+          await csvToJson().fromFile(csvFilePath);
+        console.log('data', csvRowsArr);
 
-        // repeatlDataSource.manager.query(
-        //   `COPY phrase FROM '${file}' DELIMITER ',' CSV HEADER;`
-        // );
+        const model = await modelRepo.findOneBy({
+          id: Number(req.params.modelId),
+        });
 
+        csvRowsArr.forEach(async (elem) => {
+          const phrase = phraseRepo.create({
+            label: elem.label,
+            native: elem.native,
+            foreign: elem.foreign,
+            model: model!,
+          });
+
+          await phraseRepo.save(phrase);
+        });
+
+        fs.unlink(csvFilePath, (err) => {
+          if (err && err.code == 'ENOENT') {
+            console.info(
+              "File doesn't exist, won't remove it."
+            );
+          } else if (err) {
+            console.error(
+              'Error occurred while trying to remove file'
+            );
+          } else {
+            console.info(`temp file is removed`);
+          }
+        });
         return res.status(StatusCodes.OK).send({
           success: true,
           msg: 'data is saved into DB',
