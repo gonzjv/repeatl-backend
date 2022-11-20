@@ -3,6 +3,31 @@ import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Model } from '../entity/model.entity';
 import { Phrase } from '../entity/phrase.entity';
+import multer from 'multer';
+import path from 'path';
+import * as fs from 'node:fs';
+// import path from 'node:path';
+import csvToJson from 'csvtojson';
+
+const storage = multer.diskStorage({
+  destination: (_, __, cb) => {
+    cb(null, __dirname);
+  },
+  filename: (_, file, callback) => {
+    callback(
+      null,
+      Date.now() + path.extname(file.originalname)
+    );
+  },
+});
+
+// const upload = multer({
+//   dest: 'uploads/',
+// });
+
+const upload = multer({
+  storage: storage,
+});
 
 const router = Router();
 const modelRepo =
@@ -94,5 +119,69 @@ router.route('/:id').delete(async (req, res) => {
       .send(error);
   }
 });
+
+router
+  .route('/upload/csv/:modelId')
+  .post(
+    upload.single('csvFile'),
+    async (req, res) => {
+      try {
+        // console.log('req.file', req.file);
+
+        const csvFilePath = `${req.file?.path}`;
+        console.log('file', csvFilePath);
+
+        // const fileTest = path.resolve(
+        //   `${req.file?.path}`
+        // );
+
+        // console.log(
+        //   'isFile?',
+        //   fs.lstatSync(csvFilePath).isFile()
+        // );
+
+        const csvRowsArr =
+          await csvToJson().fromFile(csvFilePath);
+        console.log('data', csvRowsArr);
+
+        const model = await modelRepo.findOneBy({
+          id: Number(req.params.modelId),
+        });
+
+        csvRowsArr.forEach(async (elem) => {
+          const phrase = phraseRepo.create({
+            label: elem.label,
+            native: elem.native,
+            foreign: elem.foreign,
+            model: model!,
+          });
+
+          await phraseRepo.save(phrase);
+        });
+
+        fs.unlink(csvFilePath, (err) => {
+          if (err && err.code == 'ENOENT') {
+            console.info(
+              "File doesn't exist, won't remove it."
+            );
+          } else if (err) {
+            console.error(
+              'Error occurred while trying to remove file'
+            );
+          } else {
+            console.info(`temp file is removed`);
+          }
+        });
+        return res.status(StatusCodes.OK).send({
+          success: true,
+          msg: 'data is saved into DB',
+        });
+      } catch (error) {
+        res
+          .status(StatusCodes.NOT_ACCEPTABLE)
+          .send(error);
+      }
+    }
+  );
 
 export { router as phraseRouter };
