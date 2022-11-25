@@ -100,7 +100,7 @@ router
       });
 
       const collection = collectionRepo.create({
-        name: req.body.name,
+        number: req.body.number,
         course: course!,
       });
 

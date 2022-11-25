@@ -14,7 +14,7 @@ export class Collection {
   id!: number;
 
   @Column()
-  name!: string;
+  number!: string;
 
   @ManyToOne(
     () => Course,
