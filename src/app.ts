@@ -7,7 +7,6 @@ import { userRouter } from './resources/user.router';
 import { courseRouter } from './resources/course.router';
 import { collectionRouter } from './resources/collection.router';
 import cors from 'cors';
-import { modelSubCollectionRouter } from './resources/modelSubCollection.router';
 import { modelRouter } from './resources/model.router';
 import { modelSectionRouter } from './resources/modelSection.router';
 import { phraseRouter } from './resources/phrase.router';
@@ -70,11 +69,6 @@ app.use(
   '/collections',
   checkToken,
   collectionRouter
-);
-app.use(
-  '/modelSubCollections',
-  checkToken,
-  modelSubCollectionRouter
 );
 app.use(
   '/modelSections',

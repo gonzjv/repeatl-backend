@@ -16,11 +16,9 @@ router.route('/').get(async (_, res) => {
       {
         relations: {
           course: true,
-          modelSubCollection: {
-            modelSections: {
-              models: {
-                phrases: true,
-              },
+          modelSections: {
+            models: {
+              phrases: true,
             },
           },
         },
@@ -40,10 +38,8 @@ router
         await collectionRepo.find({
           relations: {
             course: true,
-            modelSubCollection: {
-              modelSections: {
-                models: { phrases: true },
-              },
+            modelSections: {
+              models: { phrases: true },
             },
           },
           where: {
@@ -70,18 +66,8 @@ router
             id: Number(req.params.collectionId),
           },
           relations: {
-            modelSubCollection: {
-              modelSections: true,
-            },
+            modelSections: true,
           },
-          // relations: {
-          //   course: true,
-          //   modelSubCollection: {
-          //     modelSections: {
-          //       models: { phrases: true },
-          //     },
-          //   },
-          // },
         });
       res.json(collection);
     } catch (error) {
