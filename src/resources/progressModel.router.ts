@@ -26,10 +26,9 @@ router.route('/').get(async (_, res) => {
 });
 
 router
-  .route('/:userId.:subCollectionId')
+  .route('/:userId.:collectionId')
   .get(async (req, res) => {
-    const { subCollectionId, userId } =
-      req.params;
+    const { collectionId, userId } = req.params;
     try {
       const progressArr =
         await progressModelRepo.find({
@@ -45,8 +44,7 @@ router
 
       const progress = progressArr.find(
         (e) =>
-          e.subCollectionId ==
-          Number(subCollectionId)
+          e.collectionId == Number(collectionId)
       );
       progress && res.json(progress);
       !progress &&
@@ -66,7 +64,7 @@ router.route('/').post(async (req, res) => {
     modelStep,
     phraseStep,
     sectionStep,
-    subCollectionId,
+    collectionId,
   } = req.body;
   try {
     const user = await userRepo.findOneBy({
@@ -77,7 +75,7 @@ router.route('/').post(async (req, res) => {
       modelStep: modelStep,
       phraseStep: phraseStep,
       sectionStep: sectionStep,
-      subCollectionId: subCollectionId,
+      collectionId: collectionId,
       user: user!,
     });
 
