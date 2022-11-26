@@ -24,13 +24,6 @@ export class Collection {
   )
   course!: Course;
 
-  // @OneToOne(
-  //   () => ModelSubCollection,
-  //   (modelSubCollection) =>
-  //     modelSubCollection.collection
-  // )
-  // modelSubCollection!: ModelSubCollection;
-
   @OneToMany(
     () => ModelSection,
     (modelSection) => modelSection.collection
