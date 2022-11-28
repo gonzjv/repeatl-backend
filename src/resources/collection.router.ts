@@ -2,13 +2,11 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Collection } from '../entity/collection.entity';
-import { Course } from '../entity/course.entity';
+import * as collectionService from './collection.service';
 
 const router = Router();
 const collectionRepo =
   repeatlDataSource.getRepository(Collection);
-const courseRepo =
-  repeatlDataSource.getRepository(Course);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -81,18 +79,11 @@ router
   .route('/:courseId')
   .post(async (req, res) => {
     try {
-      const course = await courseRepo.findOneBy({
-        id: Number(req.params.courseId),
-      });
-
-      const collection = collectionRepo.create({
-        number: req.body.number,
-        course: course!,
-      });
-
-      const results = await collectionRepo.save(
-        collection
-      );
+      const results =
+        await collectionService.addCollection(
+          req.params.courseId,
+          req.body.number
+        );
       return res
         .status(StatusCodes.OK)
         .send(results);

@@ -4,11 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { Course } from '../entity/course.entity';
 import multer from 'multer';
 import path from 'path';
-import * as fs from 'node:fs';
-// import path from 'node:path';
-// import csvToJson from 'csvtojson';
-import { addDataFromCsv } from './helpers';
-// import { Collection } from '../entity/collection.entity';
+import * as courseService from './course.service';
 
 const storage = multer.diskStorage({
   destination: (_, __, cb) => {
@@ -90,21 +86,14 @@ router
         const csvFilePath = `${req.file?.path}`;
         console.log('file', csvFilePath);
 
-        await addDataFromCsv(csvFilePath);
+        await courseService.addDataFromCsv(
+          csvFilePath,
+          req.params.courseId
+        );
 
-        fs.unlink(csvFilePath, (err) => {
-          if (err && err.code == 'ENOENT') {
-            console.info(
-              "File doesn't exist, won't remove it."
-            );
-          } else if (err) {
-            console.error(
-              'Error occurred while trying to remove file'
-            );
-          } else {
-            console.info(`temp file is removed`);
-          }
-        });
+        await courseService.deleteFile(
+          csvFilePath
+        );
 
         return res.status(StatusCodes.OK).send({
           success: true,

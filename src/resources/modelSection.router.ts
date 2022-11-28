@@ -2,11 +2,12 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { ModelSection } from '../entity/modelSection.entity';
-import { Collection } from '../entity/collection.entity';
+// import { Collection } from '../entity/collection.entity';
+import * as modelSectionService from './modelSection.service';
 
 const router = Router();
-const collectionRepo =
-  repeatlDataSource.getRepository(Collection);
+// const collectionRepo =
+//   repeatlDataSource.getRepository(Collection);
 const modelSectionRepo =
   repeatlDataSource.getRepository(ModelSection);
 
@@ -53,21 +54,15 @@ router
   .route('/:collectionId')
   .post(async (req, res) => {
     try {
-      const collection =
-        await collectionRepo.findOneBy({
-          id: Number(req.params.collectionId),
-        });
-
-      const modelSection =
-        modelSectionRepo.create({
-          label: req.body.label,
-          number: req.body.number,
-          collection: collection!,
-        });
-
-      const results = await modelSectionRepo.save(
-        modelSection
-      );
+      const sectionData = {
+        label: req.body.label,
+        number: req.body.number,
+      };
+      const results =
+        await modelSectionService.addModelSection(
+          req.params.collectionId,
+          sectionData
+        );
       return res
         .status(StatusCodes.OK)
         .send(results);
