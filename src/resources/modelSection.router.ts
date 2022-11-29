@@ -59,7 +59,7 @@ router
       };
       const results =
         await modelSectionService.addModelSection(
-          req.params.collectionId,
+          Number(req.params.collectionId),
           sectionData
         );
       return res

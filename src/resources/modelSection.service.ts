@@ -8,12 +8,12 @@ const modelSectionRepo =
   repeatlDataSource.getRepository(ModelSection);
 
 const addModelSection = async (
-  collectionId: string,
+  collectionId: number,
   sectionData: { number: string }
 ) => {
   const collection =
     await collectionRepo.findOneBy({
-      id: Number(collectionId),
+      id: collectionId,
     });
 
   const modelSection = modelSectionRepo.create({
@@ -27,4 +27,16 @@ const addModelSection = async (
   return results;
 };
 
-export { addModelSection };
+const getModelSection = async (
+  modelSectionNumber: string,
+  collectionId: number
+) =>
+  await modelSectionRepo.findOne({
+    relations: { collection: true },
+    where: {
+      number: modelSectionNumber,
+      collection: { id: collectionId },
+    },
+  });
+
+export { addModelSection, getModelSection };

@@ -1,6 +1,37 @@
 import csvToJson from 'csvtojson';
 import * as fs from 'node:fs';
 import * as collectionService from './collection.service';
+import * as modelSectionService from './modelSection.service';
+
+const addModelSectionFromCsv = async (
+  modelSectionNumber: string,
+  collectionId: number
+) => {
+  const modelSection =
+    await modelSectionService.getModelSection(
+      modelSectionNumber,
+      collectionId
+    );
+  const isModelSectionExist =
+    modelSection !== null ? true : false;
+
+  if (isModelSectionExist) {
+    console.log('section already exist');
+  } else {
+    const sectionData = {
+      number: modelSectionNumber,
+    };
+    const newModelSection =
+      await modelSectionService.addModelSection(
+        collectionId,
+        sectionData
+      );
+    console.log(
+      'newModelSection',
+      newModelSection
+    );
+  }
+};
 
 const addDataFromCsv = async (
   csvFilePath: string,
@@ -18,8 +49,7 @@ const addDataFromCsv = async (
 
     const collectionNumber: string =
       labelPartArr[0];
-
-    // const modelSectionNumber = labelPartArr[1]
+    const modelSectionNumber = labelPartArr[1];
 
     const collection =
       await collectionService.getCollection(
@@ -32,6 +62,10 @@ const addDataFromCsv = async (
 
     if (isCollectionExist) {
       console.log('collection already exist');
+      await addModelSectionFromCsv(
+        modelSectionNumber,
+        collection!.id
+      );
     } else {
       const newCollection =
         await collectionService.addCollection(
@@ -39,6 +73,11 @@ const addDataFromCsv = async (
           collectionNumber
         );
       console.log('newCollection', newCollection);
+
+      await addModelSectionFromCsv(
+        modelSectionNumber,
+        newCollection.id
+      );
     }
   }
 };
