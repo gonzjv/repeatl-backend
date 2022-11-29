@@ -14,10 +14,7 @@ export class ModelSection {
   id!: number;
 
   @Column()
-  label!: string;
-
-  @Column()
-  number!: number;
+  number!: string;
 
   @ManyToOne(
     () => Collection,

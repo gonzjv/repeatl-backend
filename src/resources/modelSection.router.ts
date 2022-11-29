@@ -55,7 +55,6 @@ router
   .post(async (req, res) => {
     try {
       const sectionData = {
-        label: req.body.label,
         number: req.body.number,
       };
       const results =

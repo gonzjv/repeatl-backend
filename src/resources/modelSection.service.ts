@@ -9,7 +9,7 @@ const modelSectionRepo =
 
 const addModelSection = async (
   collectionId: string,
-  sectionData: { label: string; number: number }
+  sectionData: { number: string }
 ) => {
   const collection =
     await collectionRepo.findOneBy({
@@ -17,7 +17,6 @@ const addModelSection = async (
     });
 
   const modelSection = modelSectionRepo.create({
-    label: sectionData.label,
     number: sectionData.number,
     collection: collection!,
   });
