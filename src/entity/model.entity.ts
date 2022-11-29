@@ -20,7 +20,7 @@ export class Model {
   grammarSubject!: string;
 
   @Column()
-  number!: number;
+  number!: string;
 
   @ManyToOne(
     () => ModelSection,
