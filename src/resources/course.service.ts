@@ -1,12 +1,33 @@
 import csvToJson from 'csvtojson';
 import * as fs from 'node:fs';
 import * as collectionService from './collection.service';
+import {
+  addModel,
+  IModelData,
+} from './model.service';
 import * as modelSectionService from './modelSection.service';
 
+interface ICsvRow {
+  modelNumber: string;
+  label: string;
+  grammarSubject: string;
+  phraseNL1: string;
+  phraseFL1: string;
+  phraseNL2: string;
+  phraseFL2: string;
+  phraseNL3: string;
+  phraseFL3: string;
+}
+
 const addModelSectionFromCsv = async (
-  modelSectionNumber: string,
-  collectionId: number
+  collectionId: number,
+  csvRow: ICsvRow
 ) => {
+  const separator = '/';
+  const labelPartArr =
+    csvRow.label.split(separator);
+  const modelSectionNumber = labelPartArr[1];
+
   const modelSection =
     await modelSectionService.getModelSection(
       modelSectionNumber,
@@ -30,6 +51,17 @@ const addModelSectionFromCsv = async (
       'newModelSection',
       newModelSection
     );
+
+    const modelData: IModelData = {
+      label: csvRow.label,
+      grammarSubject: csvRow.grammarSubject,
+      number: csvRow.modelNumber,
+    };
+    const newModel = await addModel(
+      newModelSection.id,
+      modelData
+    );
+    console.log('newModel', newModel);
   }
 };
 
@@ -43,13 +75,12 @@ const addDataFromCsv = async (
   console.log('data', csvRowArr);
   const separator = '/';
 
-  for (const elem of csvRowArr) {
+  for (const csvRow of csvRowArr) {
     const labelPartArr =
-      elem.label.split(separator);
+      csvRow.label.split(separator);
 
     const collectionNumber: string =
       labelPartArr[0];
-    const modelSectionNumber = labelPartArr[1];
 
     const collection =
       await collectionService.getCollection(
@@ -63,8 +94,8 @@ const addDataFromCsv = async (
     if (isCollectionExist) {
       console.log('collection already exist');
       await addModelSectionFromCsv(
-        modelSectionNumber,
-        collection!.id
+        collection!.id,
+        csvRow
       );
     } else {
       const newCollection =
@@ -75,8 +106,8 @@ const addDataFromCsv = async (
       console.log('newCollection', newCollection);
 
       await addModelSectionFromCsv(
-        modelSectionNumber,
-        newCollection.id
+        newCollection.id,
+        csvRow
       );
     }
   }

@@ -2,13 +2,11 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Model } from '../entity/model.entity';
-import { ModelSection } from '../entity/modelSection.entity';
+import { addModel } from './model.service';
 
 const router = Router();
 const modelRepo =
   repeatlDataSource.getRepository(Model);
-const modelSectionRepo =
-  repeatlDataSource.getRepository(ModelSection);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -49,19 +47,28 @@ router
   .route('/:modelSectionId')
   .post(async (req, res) => {
     try {
-      const modelSection =
-        await modelSectionRepo.findOneBy({
-          id: Number(req.params.modelSectionId),
-        });
+      // const modelSection =
+      //   await modelSectionRepo.findOneBy({
+      //     id: Number(req.params.modelSectionId),
+      //   });
 
-      const model = modelRepo.create({
+      // const model = modelRepo.create({
+      //   label: req.body.label,
+      //   grammarSubject: req.body.grammarSubject,
+      //   number: req.body.number,
+      //   modelSection: modelSection!,
+      // });
+
+      // const results = await modelRepo.save(model);
+      const modelData = {
         label: req.body.label,
         grammarSubject: req.body.grammarSubject,
         number: req.body.number,
-        modelSection: modelSection!,
-      });
-
-      const results = await modelRepo.save(model);
+      };
+      const results = await addModel(
+        Number(req.params.modelSectionId),
+        modelData
+      );
       return res
         .status(StatusCodes.OK)
         .send(results);
