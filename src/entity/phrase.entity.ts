@@ -12,17 +12,11 @@ export class Phrase {
   id!: number;
 
   @Column()
-  label!: string;
-
-  @Column()
   native!: string;
 
   @Column()
   foreign!: string;
 
-  @ManyToOne(
-    () => Model,
-    (model) => model.phrases
-  )
+  @ManyToOne(() => Model, (model) => model.phrases)
   model!: Model;
 }
