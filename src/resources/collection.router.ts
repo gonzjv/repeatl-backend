@@ -2,13 +2,11 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { Collection } from '../entity/collection.entity';
-import { Course } from '../entity/course.entity';
+import * as collectionService from './collection.service';
 
 const router = Router();
 const collectionRepo =
   repeatlDataSource.getRepository(Collection);
-const courseRepo =
-  repeatlDataSource.getRepository(Course);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -16,11 +14,9 @@ router.route('/').get(async (_, res) => {
       {
         relations: {
           course: true,
-          modelSubCollection: {
-            modelSections: {
-              models: {
-                phrases: true,
-              },
+          modelSections: {
+            models: {
+              phrases: true,
             },
           },
         },
@@ -40,10 +36,8 @@ router
         await collectionRepo.find({
           relations: {
             course: true,
-            modelSubCollection: {
-              modelSections: {
-                models: { phrases: true },
-              },
+            modelSections: {
+              models: { phrases: true },
             },
           },
           where: {
@@ -70,18 +64,8 @@ router
             id: Number(req.params.collectionId),
           },
           relations: {
-            modelSubCollection: {
-              modelSections: true,
-            },
+            modelSections: true,
           },
-          // relations: {
-          //   course: true,
-          //   modelSubCollection: {
-          //     modelSections: {
-          //       models: { phrases: true },
-          //     },
-          //   },
-          // },
         });
       res.json(collection);
     } catch (error) {
@@ -95,18 +79,11 @@ router
   .route('/:courseId')
   .post(async (req, res) => {
     try {
-      const course = await courseRepo.findOneBy({
-        id: Number(req.params.courseId),
-      });
-
-      const collection = collectionRepo.create({
-        name: req.body.name,
-        course: course!,
-      });
-
-      const results = await collectionRepo.save(
-        collection
-      );
+      const results =
+        await collectionService.addCollection(
+          req.params.courseId,
+          req.body.number
+        );
       return res
         .status(StatusCodes.OK)
         .send(results);

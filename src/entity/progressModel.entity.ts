@@ -12,7 +12,7 @@ export class ProgressModel {
   id!: number;
 
   @Column()
-  subCollectionId!: number;
+  collectionId!: number;
 
   @Column()
   sectionStep!: number;

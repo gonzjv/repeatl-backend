@@ -5,8 +5,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Collection } from './collection.entity';
 import { Model } from './model.entity';
-import { ModelSubCollection } from './modelSubCollection.entity';
 
 @Entity()
 export class ModelSection {
@@ -14,17 +14,13 @@ export class ModelSection {
   id!: number;
 
   @Column()
-  label!: string;
-
-  @Column()
-  number!: number;
+  number!: string;
 
   @ManyToOne(
-    () => ModelSubCollection,
-    (modelSubCollection) =>
-      modelSubCollection.modelSections
+    () => Collection,
+    (collection) => collection.modelSections
   )
-  modelSubCollection!: ModelSubCollection;
+  collection!: Collection;
 
   @OneToMany(
     () => Model,
