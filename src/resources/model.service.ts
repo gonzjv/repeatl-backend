@@ -10,17 +10,15 @@ export interface IModelData {
 
 const modelSectionRepo =
   repeatlDataSource.getRepository(ModelSection);
-const modelRepo =
-  repeatlDataSource.getRepository(Model);
+const modelRepo = repeatlDataSource.getRepository(Model);
 
 const addModel = async (
   modelSectionId: number,
   modelData: IModelData
 ) => {
-  const modelSection =
-    await modelSectionRepo.findOneBy({
-      id: modelSectionId,
-    });
+  const modelSection = await modelSectionRepo.findOneBy({
+    id: modelSectionId,
+  });
 
   const model = modelRepo.create({
     label: modelData.label,
@@ -33,4 +31,16 @@ const addModel = async (
   return results;
 };
 
-export { addModel };
+const getModel = async (
+  modelNumber: string,
+  modelSectionId: number
+) =>
+  await modelRepo.findOne({
+    relations: { modelSection: true },
+    where: {
+      number: modelNumber,
+      modelSection: { id: modelSectionId },
+    },
+  });
+
+export { addModel, getModel };

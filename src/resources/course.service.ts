@@ -1,7 +1,11 @@
 import csvToJson from 'csvtojson';
 import * as fs from 'node:fs';
 import * as collectionService from './collection.service';
-import { addModel, IModelData } from './model.service';
+import {
+  addModel,
+  getModel,
+  IModelData,
+} from './model.service';
 import * as modelSectionService from './modelSection.service';
 
 interface ICsvRow {
@@ -103,11 +107,21 @@ const addModelFromCsv = async (
     grammarSubject: csvRow.grammarSubject,
     number: csvRow.modelNumber,
   };
-  const newModel = await addModel(
-    modelSectionId,
-    modelData
+
+  const model = await getModel(
+    modelData.number,
+    modelSectionId
   );
-  console.log('newModel', newModel);
+  const isModelExists = model !== null ? true : false;
+  if (isModelExists) {
+    console.log('model alreday exists');
+  } else {
+    const newModel = await addModel(
+      modelSectionId,
+      modelData
+    );
+    console.log('newModel', newModel);
+  }
 };
 
 const deleteFile = async (csvFilePath: string) => {
