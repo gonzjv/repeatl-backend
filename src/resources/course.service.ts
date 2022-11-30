@@ -7,6 +7,11 @@ import {
   IModelData,
 } from './model.service';
 import * as modelSectionService from './modelSection.service';
+import {
+  addPhrase,
+  getPhrase,
+  IPhrase,
+} from './phrase.service';
 
 interface ICsvRow {
   modelNumber: string;
@@ -115,12 +120,48 @@ const addModelFromCsv = async (
   const isModelExists = model !== null ? true : false;
   if (isModelExists) {
     console.log('model alreday exists');
+    await addPhraseListFromCsv(model!.id, csvRow);
   } else {
     const newModel = await addModel(
       modelSectionId,
       modelData
     );
     console.log('newModel', newModel);
+    await addPhraseListFromCsv(newModel.id, csvRow);
+  }
+};
+
+const addPhraseListFromCsv = async (
+  modelId: number,
+  csvRow: ICsvRow
+) => {
+  const {
+    phraseFL1,
+    phraseFL2,
+    phraseFL3,
+    phraseNL1,
+    phraseNL2,
+    phraseNL3,
+  } = csvRow;
+  const phraseArr: IPhrase[] = [
+    { native: phraseNL1, foreign: phraseFL1 },
+    { native: phraseNL2, foreign: phraseFL2 },
+    { native: phraseNL3, foreign: phraseFL3 },
+  ];
+
+  for (const phrase of phraseArr) {
+    const phraseFromDb = await getPhrase(
+      phrase.native,
+      modelId
+    );
+    const isPhraseExist =
+      phraseFromDb !== null ? true : false;
+    if (isPhraseExist) {
+      console.log('phrase is already exist');
+    } else {
+      const newPhrase = await addPhrase(modelId, phrase);
+      console.log('newPhrase', newPhrase);
+    }
   }
 };
 

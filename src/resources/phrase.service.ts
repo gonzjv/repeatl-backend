@@ -6,7 +6,6 @@ const modelRepo = repeatlDataSource.getRepository(Model);
 const phraseRepo = repeatlDataSource.getRepository(Phrase);
 
 export interface IPhrase {
-  label: string;
   native: string;
   foreign: string;
 }
@@ -20,7 +19,6 @@ const addPhrase = async (
   });
 
   const phrase = phraseRepo.create({
-    label: phraseData.label,
     native: phraseData.native,
     foreign: phraseData.foreign,
     model: model!,
@@ -30,4 +28,13 @@ const addPhrase = async (
   return results;
 };
 
-export { addPhrase };
+const getPhrase = async (native: string, modelId: number) =>
+  await phraseRepo.findOne({
+    relations: { model: true },
+    where: {
+      native: native,
+      model: { id: modelId },
+    },
+  });
+
+export { addPhrase, getPhrase };

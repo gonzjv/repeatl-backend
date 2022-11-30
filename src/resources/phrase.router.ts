@@ -1,12 +1,10 @@
 import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
-// import { Model } from '../entity/model.entity';
 import { Phrase } from '../entity/phrase.entity';
 import { addPhrase } from './phrase.service';
 
 const router = Router();
-// const modelRepo = repeatlDataSource.getRepository(Model);
 const phraseRepo = repeatlDataSource.getRepository(Phrase);
 
 router.route('/').get(async (_, res) => {
@@ -42,18 +40,6 @@ router.route('/:modelId').get(async (req, res) => {
 
 router.route('/:modelId').post(async (req, res) => {
   try {
-    // const model = await modelRepo.findOneBy({
-    //   id: Number(req.params.modelId),
-    // });
-
-    // const phrase = phraseRepo.create({
-    //   label: req.body.label,
-    //   native: req.body.native,
-    //   foreign: req.body.foreign,
-    //   model: model!,
-    // });
-
-    // const results = await phraseRepo.save(phrase);
     const phraseData = {
       label: req.body.label,
       native: req.body.native,
