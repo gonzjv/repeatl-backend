@@ -18,10 +18,9 @@ export class Collection {
   @Column()
   number!: string;
 
-  @ManyToOne(
-    () => Course,
-    (course) => course.collections
-  )
+  @ManyToOne(() => Course, (course) => course.collections, {
+    onDelete: 'CASCADE',
+  })
   course!: Course;
 
   @OneToMany(

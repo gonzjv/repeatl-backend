@@ -18,13 +18,11 @@ export class ModelSection {
 
   @ManyToOne(
     () => Collection,
-    (collection) => collection.modelSections
+    (collection) => collection.modelSections,
+    { onDelete: 'CASCADE' }
   )
   collection!: Collection;
 
-  @OneToMany(
-    () => Model,
-    (model) => model.modelSection
-  )
+  @OneToMany(() => Model, (model) => model.modelSection)
   models!: Model[];
 }

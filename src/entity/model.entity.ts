@@ -24,13 +24,11 @@ export class Model {
 
   @ManyToOne(
     () => ModelSection,
-    (modelSection) => modelSection.models
+    (modelSection) => modelSection.models,
+    { onDelete: 'CASCADE' }
   )
   modelSection!: ModelSection;
 
-  @OneToMany(
-    () => Phrase,
-    (phrase) => phrase.model
-  )
+  @OneToMany(() => Phrase, (phrase) => phrase.model)
   phrases!: Phrase[];
 }

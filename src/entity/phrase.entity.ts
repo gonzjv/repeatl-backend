@@ -17,6 +17,8 @@ export class Phrase {
   @Column()
   foreign!: string;
 
-  @ManyToOne(() => Model, (model) => model.phrases)
+  @ManyToOne(() => Model, (model) => model.phrases, {
+    onDelete: 'CASCADE',
+  })
   model!: Model;
 }
