@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Course } from './course.entity';
 import { ModelSection } from './modelSection.entity';
+import { WordSection } from './wordSection';
 // import { ModelSubCollection } from './modelSubCollection.entity';
 
 @Entity()
@@ -28,4 +29,10 @@ export class Collection {
     (modelSection) => modelSection.collection
   )
   modelSections!: ModelSection[];
+
+  @OneToMany(
+    () => WordSection,
+    (wordSection) => wordSection.collection
+  )
+  wordSections!: WordSection[];
 }
