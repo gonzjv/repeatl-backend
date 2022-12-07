@@ -29,13 +29,28 @@ const addWord = async (
   return results;
 };
 
-// const getPhrase = async (native: string, modelId: number) =>
-//   await phraseRepo.findOne({
-//     relations: { model: true },
-//     where: {
-//       native: native,
-//       model: { id: modelId },
-//     },
-//   });
+const getWord = async (
+  native: string,
+  wordSectionId: number
+) =>
+  await wordRepo.findOne({
+    relations: { wordSection: true },
+    where: {
+      native: native,
+      wordSection: { id: wordSectionId },
+    },
+  });
 
-export { addWord };
+const getWordArr = async (wordSectionId: number) =>
+  await wordRepo.find({
+    relations: {
+      wordSection: true,
+    },
+    where: {
+      wordSection: {
+        id: Number(wordSectionId),
+      },
+    },
+  });
+
+export { addWord, getWord, getWordArr };

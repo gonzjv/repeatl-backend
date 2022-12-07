@@ -13,7 +13,7 @@ router.route('/').get(async (_, res) => {
     const collections = await collectionRepo.find({
       relations: {
         course: true,
-        wordSections: {
+        modelSections: {
           models: {
             phrases: true,
           },
@@ -31,7 +31,7 @@ router.route('/:courseId').get(async (req, res) => {
     const collections = await collectionRepo.find({
       relations: {
         course: true,
-        wordSections: {
+        modelSections: {
           models: { phrases: true },
         },
       },

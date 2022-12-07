@@ -1,37 +1,27 @@
 import { Router } from 'express';
-import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
-import { Word } from '../entity/word.entity';
-import { addWord } from './word.service';
+import { addWord, getWordArr } from './word.service';
 
 const router = Router();
-const wordRepo = repeatlDataSource.getRepository(Word);
 
-router.route('/').get(async (_, res) => {
-  try {
-    const phrase = await wordRepo.find({
-      relations: {
-        wordSection: true,
-      },
-    });
-    res.json(phrase);
-  } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).send(error);
-  }
-});
+// router.route('/').get(async (_, res) => {
+//   try {
+//     const phrase = await wordRepo.find({
+//       relations: {
+//         wordSection: true,
+//       },
+//     });
+//     res.json(phrase);
+//   } catch (error) {
+//     res.status(StatusCodes.NOT_FOUND).send(error);
+//   }
+// });
 
 router.route('/:wordSectionId').get(async (req, res) => {
   try {
-    const wordArr = await wordRepo.find({
-      relations: {
-        wordSection: true,
-      },
-      where: {
-        wordSection: {
-          id: Number(req.params.wordSectionId),
-        },
-      },
-    });
+    const wordArr = await getWordArr(
+      Number(req.params.wordSectionId)
+    );
     res.json(wordArr);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
