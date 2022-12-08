@@ -13,6 +13,7 @@ import { phraseRouter } from './resources/phrase.router';
 import { progressModelRouter } from './resources/progressModel.router';
 import { checkToken } from './common/helpers';
 import { wordRouter } from './resources/word.router.ts';
+import { wordSectionRouter } from './resources/wordSection.router';
 // import { checkToken } from './common/helpers';
 // import { StatusCodes } from 'http-status-codes';
 
@@ -66,7 +67,8 @@ app.use('/modelSections', checkToken, modelSectionRouter);
 app.use('/models', checkToken, modelRouter);
 app.use('/phrases', checkToken, phraseRouter);
 app.use('/progressModels', checkToken, progressModelRouter);
-app.use('/wordSections', checkToken, wordRouter);
+app.use('/wordSections', checkToken, wordSectionRouter);
+app.use('/words', checkToken, wordRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(
