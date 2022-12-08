@@ -62,4 +62,4 @@ router.route('/:wordSectionId').post(async (req, res) => {
 //   }
 // });
 
-export { router as phraseRouter };
+export { router as wordRouter };
