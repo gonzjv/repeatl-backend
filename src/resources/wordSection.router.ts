@@ -2,7 +2,10 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { WordSection } from '../entity/wordSection';
-import { addWordSection } from './wordSection.service';
+import {
+  addWordSection,
+  getWordSectionArr,
+} from './wordSection.service';
 
 const router = Router();
 const wordSectionRepo =
@@ -25,17 +28,10 @@ const wordSectionRepo =
 
 router.route('/:collectionId').get(async (req, res) => {
   try {
-    const wordSections = await wordSectionRepo.find({
-      relations: {
-        collection: true,
-        words: true,
-      },
-      where: {
-        collection: {
-          id: Number(req.params.collectionId),
-        },
-      },
-    });
+    const wordSections = await getWordSectionArr(
+      req.params.collectionId
+    );
+
     res.json(wordSections);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);

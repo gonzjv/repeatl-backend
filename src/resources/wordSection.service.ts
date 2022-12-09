@@ -36,4 +36,21 @@ const getWordSection = async (
     },
   });
 
-export { addWordSection, getWordSection };
+const getWordSectionArr = async (collectionId: string) =>
+  await wordSectionRepo.find({
+    relations: {
+      collection: true,
+      words: true,
+    },
+    where: {
+      collection: {
+        id: Number(collectionId),
+      },
+    },
+  });
+
+export {
+  addWordSection,
+  getWordSection,
+  getWordSectionArr,
+};
