@@ -1,8 +1,11 @@
 import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
+import { repeatlDataSource } from '../../app-data-source';
+import { Word } from '../entity/word.entity';
 import { addWord, getWordArr } from './word.service';
 
 const router = Router();
+const wordRepo = repeatlDataSource.getRepository(Word);
 
 // router.route('/').get(async (_, res) => {
 //   try {
@@ -45,21 +48,21 @@ router.route('/:wordSectionId').post(async (req, res) => {
   }
 });
 
-// router.route('/:id').delete(async (req, res) => {
-//   try {
-//     const elemToRemove = await wordRepo.findOneBy({
-//       id: Number(req.params.id),
-//     });
-//     if (elemToRemove) {
-//       await wordRepo.remove(elemToRemove);
-//       return res.status(StatusCodes.OK).send(elemToRemove);
-//     }
-//     return res
-//       .status(StatusCodes.NOT_ACCEPTABLE)
-//       .send('element is not exist');
-//   } catch (error) {
-//     res.status(StatusCodes.BAD_REQUEST).send(error);
-//   }
-// });
+router.route('/:id').delete(async (req, res) => {
+  try {
+    const elemToRemove = await wordRepo.findOneBy({
+      id: Number(req.params.id),
+    });
+    if (elemToRemove) {
+      await wordRepo.remove(elemToRemove);
+      return res.status(StatusCodes.OK).send(elemToRemove);
+    }
+    return res
+      .status(StatusCodes.NOT_ACCEPTABLE)
+      .send('element is not exist');
+  } catch (error) {
+    res.status(StatusCodes.BAD_REQUEST).send(error);
+  }
+});
 
 export { router as wordRouter };
