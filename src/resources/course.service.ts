@@ -12,9 +12,15 @@ import {
   getPhrase,
   IPhrase,
 } from './phrase.service';
+import { addWord, getWord, IWord } from './word.service';
+import {
+  addWordSection,
+  getWordSection,
+} from './wordSection.service';
 
 interface ICsvRow {
   modelNumber: string;
+  tag: string;
   label: string;
   grammarSubject: string;
   phraseNL1: string;
@@ -23,7 +29,10 @@ interface ICsvRow {
   phraseFL2: string;
   phraseNL3: string;
   phraseFL3: string;
+  wordNL: string;
+  wordFL: string;
 }
+const SEPARATOR = '/';
 
 const addDataFromCsv = async (
   csvFilePath: string,
@@ -41,9 +50,9 @@ const addCollectionFromCsv = async (
   csvRow: ICsvRow,
   courseId: string
 ) => {
-  const separator = '/';
-
-  const labelPartArr = csvRow.label.split(separator);
+  const labelPartArr = csvRow.label.split(SEPARATOR);
+  const MODEL_TAG = 'M';
+  const WORD_TAG = 'W';
 
   const collectionNumber: string = labelPartArr[0];
 
@@ -57,7 +66,13 @@ const addCollectionFromCsv = async (
 
   if (isCollectionExist) {
     console.log('collection already exist');
-    await addModelSectionFromCsv(collection!.id, csvRow);
+    csvRow.tag == MODEL_TAG &&
+      (await addModelSectionFromCsv(
+        collection!.id,
+        csvRow
+      ));
+    csvRow.tag == WORD_TAG &&
+      (await addWordSectionFromCsv(collection!.id, csvRow));
   } else {
     const newCollection =
       await collectionService.addCollection(
@@ -66,7 +81,17 @@ const addCollectionFromCsv = async (
       );
     console.log('newCollection', newCollection);
 
-    await addModelSectionFromCsv(newCollection.id, csvRow);
+    csvRow.tag == MODEL_TAG &&
+      (await addModelSectionFromCsv(
+        newCollection.id,
+        csvRow
+      ));
+    csvRow.tag == WORD_TAG &&
+      (await addWordSectionFromCsv(
+        newCollection.id,
+        csvRow
+      ));
+    // console.log('row contain WORD data');
   }
 };
 
@@ -74,8 +99,7 @@ const addModelSectionFromCsv = async (
   collectionId: number,
   csvRow: ICsvRow
 ) => {
-  const separator = '/';
-  const labelPartArr = csvRow.label.split(separator);
+  const labelPartArr = csvRow.label.split(SEPARATOR);
   const modelSectionNumber = labelPartArr[1];
 
   const modelSection =
@@ -100,6 +124,55 @@ const addModelSectionFromCsv = async (
       );
     console.log('newModelSection', newModelSection);
     await addModelFromCsv(newModelSection.id, csvRow);
+  }
+};
+
+const addWordSectionFromCsv = async (
+  collectionId: number,
+  csvRow: ICsvRow
+) => {
+  const labelPartArr = csvRow.label.split(SEPARATOR);
+  const wordSectionNumber = labelPartArr[1];
+
+  const wordSection = await getWordSection(
+    wordSectionNumber,
+    collectionId
+  );
+  const isWordSectionExist =
+    wordSection !== null ? true : false;
+
+  if (isWordSectionExist) {
+    console.log('section already exist');
+    await addWordFromCsv(wordSection!.id, csvRow);
+  } else {
+    const sectionData = {
+      number: wordSectionNumber,
+    };
+    const newWordSection = await addWordSection(
+      collectionId,
+      sectionData
+    );
+    console.log('newWordSection', newWordSection);
+    await addWordFromCsv(newWordSection.id, csvRow);
+  }
+};
+
+const addWordFromCsv = async (
+  wordSectionId: number,
+  csvRow: ICsvRow
+) => {
+  const { wordNL, wordFL } = csvRow;
+  const wordData: IWord = {
+    foreign: wordFL,
+    native: wordNL,
+  };
+  const wordFromDb = await getWord(wordNL, wordSectionId);
+  const isWordExist = wordFromDb !== null ? true : false;
+  if (isWordExist) {
+    console.log('word is already exist');
+  } else {
+    const newWord = await addWord(wordSectionId, wordData);
+    console.log('newWord', newWord);
   }
 };
 
