@@ -34,6 +34,9 @@ router.route('/:courseId').get(async (req, res) => {
         modelSections: {
           models: { phrases: true },
         },
+        wordSections: {
+          words: true,
+        },
       },
       where: {
         course: {
