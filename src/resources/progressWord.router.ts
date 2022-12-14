@@ -2,42 +2,38 @@ import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import { ProgressModel } from '../entity/progressModel.entity';
-import { User } from '../entity/user.entity';
+import {
+  addProgressWord,
+  getProgressWord,
+} from './progressWord.service';
 
 const router = Router();
-const userRepo = repeatlDataSource.getRepository(User);
 const progressModelRepo =
   repeatlDataSource.getRepository(ProgressModel);
 
-router.route('/').get(async (_, res) => {
-  try {
-    const progress = await progressModelRepo.find({
-      relations: {
-        user: true,
-      },
-    });
-    res.json(progress);
-  } catch (error) {
-    res.status(StatusCodes.NOT_FOUND).send(error);
-  }
-});
+// router.route('/').get(async (_, res) => {
+//   try {
+//     const progress = await progressModelRepo.find({
+//       relations: {
+//         user: true,
+//       },
+//     });
+//     res.json(progress);
+//   } catch (error) {
+//     res.status(StatusCodes.NOT_FOUND).send(error);
+//   }
+// });
 
 router
   .route('/:userId.:collectionId')
   .get(async (req, res) => {
     const { collectionId, userId } = req.params;
     try {
-      const progressArr = await progressModelRepo.find({
-        where: {
-          user: {
-            id: Number(userId),
-          },
-        },
-      });
-
-      const progress = progressArr.find(
-        (e) => e.collectionId == Number(collectionId)
+      const progress = await getProgressWord(
+        collectionId,
+        userId
       );
+
       progress && res.json(progress);
       !progress &&
         res
@@ -49,27 +45,17 @@ router
   });
 
 router.route('/').post(async (req, res) => {
-  const {
+  const { userId, wordStep, sectionStep, collectionId } =
+    req.body;
+
+  const progressData = {
     userId,
-    modelStep,
-    phraseStep,
+    wordStep,
     sectionStep,
     collectionId,
-  } = req.body;
+  };
   try {
-    const user = await userRepo.findOneBy({
-      id: userId,
-    });
-
-    const progress = progressModelRepo.create({
-      modelStep: modelStep,
-      phraseStep: phraseStep,
-      sectionStep: sectionStep,
-      collectionId: collectionId,
-      user: user!,
-    });
-
-    const results = await progressModelRepo.save(progress);
+    const results = await addProgressWord(progressData);
     return res.status(StatusCodes.OK).send(results);
   } catch (error) {
     res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
