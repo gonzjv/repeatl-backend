@@ -3,6 +3,7 @@ import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
 import {
   addProgressWord,
+  getProgressArr,
   getProgressWord,
 } from './progressWord.service';
 import { ProgressWord } from '../entity/progressWord.entity';
@@ -11,18 +12,14 @@ const router = Router();
 const progressWordRepo =
   repeatlDataSource.getRepository(ProgressWord);
 
-// router.route('/').get(async (_, res) => {
-//   try {
-//     const progress = await progressModelRepo.find({
-//       relations: {
-//         user: true,
-//       },
-//     });
-//     res.json(progress);
-//   } catch (error) {
-//     res.status(StatusCodes.NOT_FOUND).send(error);
-//   }
-// });
+router.route('/').get(async (_, res) => {
+  try {
+    const progressArr = getProgressArr();
+    res.json(progressArr);
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).send(error);
+  }
+});
 
 router
   .route('/:userId.:collectionId')

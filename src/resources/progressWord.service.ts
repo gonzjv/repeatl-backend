@@ -13,6 +13,15 @@ export interface IProgressData {
   collectionId: string;
 }
 
+const getProgressArr = async () => {
+  const progressArr = await progressWordRepo.find({
+    relations: {
+      user: true,
+    },
+  });
+  return progressArr;
+};
+
 const addProgressWord = async (
   progressData: IProgressData
 ) => {
@@ -30,26 +39,12 @@ const addProgressWord = async (
     user: user!,
   });
 
-  return progress;
+  const newProgressWord = await progressWordRepo.save(
+    progress
+  );
+
+  return newProgressWord;
 };
-
-// const addPhrase = async (
-//   modelId: number,
-//   phraseData: IPhrase
-// ) => {
-//   const model = await modelRepo.findOneBy({
-//     id: modelId,
-//   });
-
-//   const phrase = phraseRepo.create({
-//     native: phraseData.native,
-//     foreign: phraseData.foreign,
-//     model: model!,
-//   });
-
-//   const results = await phraseRepo.save(phrase);
-//   return results;
-// };
 
 const getProgressWord = async (
   collectionId: string,
@@ -70,4 +65,4 @@ const getProgressWord = async (
   return progress;
 };
 
-export { getProgressWord, addProgressWord };
+export { getProgressWord, addProgressWord, getProgressArr };
