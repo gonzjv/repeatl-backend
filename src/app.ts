@@ -12,6 +12,9 @@ import { modelSectionRouter } from './resources/modelSection.router';
 import { phraseRouter } from './resources/phrase.router';
 import { progressModelRouter } from './resources/progressModel.router';
 import { checkToken } from './common/helpers';
+import { wordRouter } from './resources/word.router.ts';
+import { wordSectionRouter } from './resources/wordSection.router';
+import { progressWordRouter } from './resources/progressWord.router';
 // import { checkToken } from './common/helpers';
 // import { StatusCodes } from 'http-status-codes';
 
@@ -19,9 +22,7 @@ import { checkToken } from './common/helpers';
 repeatlDataSource
   .initialize()
   .then(() => {
-    console.log(
-      'Data Source has been initialized!'
-    );
+    console.log('Data Source has been initialized!');
   })
   .catch((err) => {
     console.error(
@@ -35,16 +36,13 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use(
-  '/',
-  (req, res, next): undefined | void => {
-    if (req.originalUrl === '/') {
-      res.send('Service is running!');
-      return;
-    }
-    next();
+app.use('/', (req, res, next): undefined | void => {
+  if (req.originalUrl === '/') {
+    res.send('Service is running!');
+    return;
   }
-);
+  next();
+});
 
 //checking token
 // app.use(
@@ -65,23 +63,14 @@ app.use(
 // register routes
 app.use('/users', userRouter);
 app.use('/courses', checkToken, courseRouter);
-app.use(
-  '/collections',
-  checkToken,
-  collectionRouter
-);
-app.use(
-  '/modelSections',
-  checkToken,
-  modelSectionRouter
-);
+app.use('/collections', checkToken, collectionRouter);
+app.use('/modelSections', checkToken, modelSectionRouter);
 app.use('/models', checkToken, modelRouter);
 app.use('/phrases', checkToken, phraseRouter);
-app.use(
-  '/progressModels',
-  checkToken,
-  progressModelRouter
-);
+app.use('/progressModels', checkToken, progressModelRouter);
+app.use('/wordSections', checkToken, wordSectionRouter);
+app.use('/words', checkToken, wordRouter);
+app.use('/progressWord', checkToken, progressWordRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(

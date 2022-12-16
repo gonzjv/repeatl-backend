@@ -6,10 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Collection } from './collection.entity';
-import { Model } from './model.entity';
+import { Word } from './word.entity';
 
 @Entity()
-export class ModelSection {
+export class WordSection {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -18,11 +18,11 @@ export class ModelSection {
 
   @ManyToOne(
     () => Collection,
-    (collection) => collection.modelSections,
+    (collection) => collection.wordSections,
     { onDelete: 'CASCADE' }
   )
   collection!: Collection;
 
-  @OneToMany(() => Model, (model) => model.modelSection)
-  models!: Model[];
+  @OneToMany(() => Word, (word) => word.wordSection)
+  words!: Word[];
 }

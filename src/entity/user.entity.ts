@@ -5,6 +5,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ProgressModel } from './progressModel.entity';
+import { ProgressWord } from './progressWord.entity';
 
 @Entity()
 export class User {
@@ -25,4 +26,10 @@ export class User {
     (progress) => progress.user
   )
   progressModels!: ProgressModel[];
+
+  @OneToMany(
+    () => ProgressWord,
+    (progress) => progress.user
+  )
+  progressWordArr!: ProgressWord[];
 }
