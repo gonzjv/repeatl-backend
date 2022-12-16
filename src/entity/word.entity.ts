@@ -4,7 +4,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { WordSection } from './wordSection';
+import { WordSection } from './wordSection.entity';
 
 @Entity()
 export class Word {

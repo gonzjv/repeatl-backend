@@ -1,6 +1,6 @@
 import { repeatlDataSource } from '../../app-data-source';
 import { Word } from '../entity/word.entity';
-import { WordSection } from '../entity/wordSection';
+import { WordSection } from '../entity/wordSection.entity';
 
 const wordRepo = repeatlDataSource.getRepository(Word);
 const wordSectionRepo =

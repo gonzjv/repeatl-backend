@@ -1,15 +1,15 @@
 import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
-import { ProgressModel } from '../entity/progressModel.entity';
 import {
   addProgressWord,
   getProgressWord,
 } from './progressWord.service';
+import { ProgressWord } from '../entity/progressWord.entity';
 
 const router = Router();
-const progressModelRepo =
-  repeatlDataSource.getRepository(ProgressModel);
+const progressWordRepo =
+  repeatlDataSource.getRepository(ProgressWord);
 
 // router.route('/').get(async (_, res) => {
 //   try {
@@ -63,21 +63,19 @@ router.route('/').post(async (req, res) => {
 });
 
 router.route('/').put(async (req, res) => {
-  const { id, modelStep, phraseStep, sectionStep } =
-    req.body;
+  const { id, wordStep, sectionStep } = req.body;
   try {
     const elementToUpdate =
-      await progressModelRepo.findOneBy({
+      await progressWordRepo.findOneBy({
         id: id,
       });
 
-    elementToUpdate!.modelStep = modelStep;
-    elementToUpdate!.phraseStep = phraseStep;
+    elementToUpdate!.wordStep = wordStep;
     elementToUpdate!.sectionStep = sectionStep;
 
     const results =
       elementToUpdate &&
-      (await progressModelRepo.save(elementToUpdate));
+      (await progressWordRepo.save(elementToUpdate));
     return res.status(StatusCodes.OK).send(results);
   } catch (error) {
     res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
@@ -106,4 +104,4 @@ router.route('/').put(async (req, res) => {
 //   }
 // });
 
-export { router as progressModelRouter };
+export { router as progressWordRouter };

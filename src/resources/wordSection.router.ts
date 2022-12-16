@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { repeatlDataSource } from '../../app-data-source';
 import { StatusCodes } from 'http-status-codes';
-import { WordSection } from '../entity/wordSection';
+import { WordSection } from '../entity/wordSection.entity';
 import {
   addWordSection,
   getWordSectionArr,

@@ -8,7 +8,7 @@ import {
 } from 'typeorm';
 import { Course } from './course.entity';
 import { ModelSection } from './modelSection.entity';
-import { WordSection } from './wordSection';
+import { WordSection } from './wordSection.entity';
 // import { ModelSubCollection } from './modelSubCollection.entity';
 
 @Entity()
