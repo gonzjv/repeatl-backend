@@ -17,6 +17,12 @@ export class Word {
   @Column()
   foreign!: string;
 
+  @Column()
+  mnemoTag!: string;
+
+  @Column()
+  transcription!: string;
+
   @ManyToOne(
     () => WordSection,
     (wordSection) => wordSection.words,
