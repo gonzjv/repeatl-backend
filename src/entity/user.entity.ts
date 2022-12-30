@@ -1,9 +1,12 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Progress } from './progress.entity';
 import { ProgressModel } from './progressModel.entity';
 import { ProgressWord } from './progressWord.entity';
 
@@ -32,4 +35,8 @@ export class User {
     (progress) => progress.user
   )
   progressWordArr!: ProgressWord[];
+
+  @OneToOne(() => Progress, (progress) => progress.user)
+  @JoinColumn()
+  progress!: Progress;
 }

@@ -12,7 +12,7 @@ import { modelSectionRouter } from './resources/modelSection.router';
 import { phraseRouter } from './resources/phrase.router';
 import { progressModelRouter } from './resources/progressModel.router';
 import { checkToken } from './common/helpers';
-import { wordRouter } from './resources/word.router.ts';
+import { wordRouter } from './resources/word.router';
 import { wordSectionRouter } from './resources/wordSection.router';
 import { progressWordRouter } from './resources/progressWord.router';
 // import { checkToken } from './common/helpers';
