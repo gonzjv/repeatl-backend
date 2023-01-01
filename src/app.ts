@@ -15,6 +15,7 @@ import { checkToken } from './common/helpers';
 import { wordRouter } from './resources/word.router';
 import { wordSectionRouter } from './resources/wordSection.router';
 import { progressWordRouter } from './resources/progressWord.router';
+import { progressRouter } from './resources/progress.router';
 // import { checkToken } from './common/helpers';
 // import { StatusCodes } from 'http-status-codes';
 
@@ -71,6 +72,7 @@ app.use('/progressModels', checkToken, progressModelRouter);
 app.use('/wordSections', checkToken, wordSectionRouter);
 app.use('/words', checkToken, wordRouter);
 app.use('/progressWord', checkToken, progressWordRouter);
+app.use('/progress', checkToken, progressRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(

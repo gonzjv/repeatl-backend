@@ -2,7 +2,10 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 // import { repeatlDataSource } from '../../app-data-source';
 // import { Progress } from '../entity/progress.entity';
-import { getProgressArr } from './progress.service';
+import {
+  addProgress,
+  getProgressArr,
+} from './progress.service';
 
 const router = Router();
 // const progressRepo =
@@ -28,24 +31,16 @@ router.route('/').get(async (_, res) => {
 //   }
 // });
 
-// router.route('/:wordSectionId').post(async (req, res) => {
-//   try {
-//     const wordData = {
-//       label: req.body.label,
-//       native: req.body.native,
-//       foreign: req.body.foreign,
-//       mnemoTag: req.body.mnemoTag,
-//       transcription: req.body.transcription,
-//     };
-//     const results = await addWord(
-//       Number(req.params.wordSectionId),
-//       wordData
-//     );
-//     return res.status(StatusCodes.OK).send(results);
-//   } catch (error) {
-//     res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
-//   }
-// });
+router.route('/:userId').post(async (req, res) => {
+  try {
+    const results = await addProgress(
+      Number(req.params.userId)
+    );
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
 
 // router.route('/:id').delete(async (req, res) => {
 //   try {
@@ -64,4 +59,4 @@ router.route('/').get(async (_, res) => {
 //   }
 // });
 
-export { router as wordRouter };
+export { router as progressRouter };
