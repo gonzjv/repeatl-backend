@@ -33,17 +33,13 @@ const addProgress = async (userId: number) => {
   return results;
 };
 
-// const getWord = async (
-//   native: string,
-//   wordSectionId: number
-// ) =>
-//   await wordRepo.findOne({
-//     relations: { wordSection: true },
-//     where: {
-//       native: native,
-//       wordSection: { id: wordSectionId },
-//     },
-//   });
+const getProgress = async (userId: number) =>
+  await progressRepo.findOne({
+    relations: { courseStateArr: true },
+    where: {
+      user: { id: userId },
+    },
+  });
 
 // const getWordArr = async (wordSectionId: number) =>
 //   await wordRepo.find({
@@ -57,4 +53,4 @@ const addProgress = async (userId: number) => {
 //     },
 //   });
 
-export { getProgressArr, addProgress };
+export { getProgressArr, addProgress, getProgress };

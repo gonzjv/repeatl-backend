@@ -1,15 +1,12 @@
 import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
-// import { repeatlDataSource } from '../../app-data-source';
-// import { Progress } from '../entity/progress.entity';
 import {
   addProgress,
+  getProgress,
   getProgressArr,
 } from './progress.service';
 
 const router = Router();
-// const progressRepo =
-//   repeatlDataSource.getRepository(Progress);
 
 router.route('/').get(async (_, res) => {
   try {
@@ -20,16 +17,16 @@ router.route('/').get(async (_, res) => {
   }
 });
 
-// router.route('/:wordSectionId').get(async (req, res) => {
-//   try {
-//     const wordArr = await getWordArr(
-//       Number(req.params.wordSectionId)
-//     );
-//     res.json(wordArr);
-//   } catch (error) {
-//     res.status(StatusCodes.NOT_FOUND).send(error);
-//   }
-// });
+router.route('/:userId').get(async (req, res) => {
+  try {
+    const progress = await getProgress(
+      Number(req.params.userId)
+    );
+    res.json(progress);
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).send(error);
+  }
+});
 
 router.route('/:userId').post(async (req, res) => {
   try {
