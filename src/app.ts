@@ -19,6 +19,7 @@ import { progressRouter } from './resources/progress.router';
 import { courseStateRouter } from './resources/courseState.router';
 import { collectionStateRouter } from './resources/collectionState.router';
 import { wordSectionStateRouter } from './resources/wordSectionState.router';
+import { wordStateRouter } from './resources/wordState.router';
 // import { checkToken } from './common/helpers';
 // import { StatusCodes } from 'http-status-codes';
 
@@ -87,6 +88,8 @@ app.use(
   checkToken,
   wordSectionStateRouter
 );
+
+app.use('/wordState', checkToken, wordStateRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(
