@@ -52,4 +52,21 @@ const getWordState = async (
     },
   });
 
-export { addWordState, getWordState, getWordStateArr };
+const completeWord = async (wordStateId: number) => {
+  const elementToUpdate = await wordStateRepo.findOneBy({
+    id: wordStateId,
+  });
+
+  elementToUpdate!.isCompleted = true;
+
+  const results =
+    elementToUpdate &&
+    (await wordStateRepo.save(elementToUpdate));
+  return results;
+};
+export {
+  addWordState,
+  getWordState,
+  getWordStateArr,
+  completeWord,
+};

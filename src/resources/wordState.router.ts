@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addWordState,
+  completeWord,
   getWordState,
   getWordStateArr,
 } from './wordState.service';
@@ -61,5 +62,15 @@ router
 //     res.status(StatusCodes.BAD_REQUEST).send(error);
 //   }
 // });
+
+router.route('/').put(async (req, res) => {
+  const { wordStateId } = req.body;
+  try {
+    const results = await completeWord(wordStateId);
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
 
 export { router as wordStateRouter };
