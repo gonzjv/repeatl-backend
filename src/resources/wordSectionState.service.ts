@@ -55,8 +55,25 @@ const getWordSectionState = async (
     },
   });
 
+const completeWordSection = async (
+  wordSectionStateId: number
+) => {
+  const elementToUpdate =
+    await wordSectionStateRepo.findOneBy({
+      id: wordSectionStateId,
+    });
+
+  elementToUpdate!.isCompleted = true;
+
+  const results =
+    elementToUpdate &&
+    (await wordSectionStateRepo.save(elementToUpdate));
+  return results;
+};
+
 export {
   getWordSectionStateArr,
   getWordSectionState,
   addWordSectionState,
+  completeWordSection,
 };

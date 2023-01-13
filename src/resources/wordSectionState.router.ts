@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addWordSectionState,
+  completeWordSection,
   getWordSectionState,
   getWordSectionStateArr,
 } from './wordSectionState.service';
@@ -45,6 +46,18 @@ router
       res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
     }
   });
+
+router.route('/').put(async (req, res) => {
+  const { wordSectionStateId } = req.body;
+  try {
+    const results = await completeWordSection(
+      wordSectionStateId
+    );
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
 
 // router.route('/:id').delete(async (req, res) => {
 //   try {
