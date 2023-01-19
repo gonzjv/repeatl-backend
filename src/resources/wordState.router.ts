@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addWordState,
+  completeFirstRepeatBatch,
   completeWord,
   getWordState,
   getWordStateArr,
@@ -72,5 +73,19 @@ router.route('/').put(async (req, res) => {
     res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
   }
 });
+
+router
+  .route('/firstRepeatComplete')
+  .put(async (req, res) => {
+    const { wordStateIdArr } = req.body;
+    try {
+      const results = await completeFirstRepeatBatch(
+        wordStateIdArr
+      );
+      return res.status(StatusCodes.OK).send(results);
+    } catch (error) {
+      res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+    }
+  });
 
 export { router as wordStateRouter };

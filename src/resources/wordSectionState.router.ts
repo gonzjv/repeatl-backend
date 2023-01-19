@@ -2,9 +2,9 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addWordSectionState,
-  completeWordSection,
   getWordSectionState,
   getWordSectionStateArr,
+  updateWordSectionState,
 } from './wordSectionState.service';
 
 const router = Router();
@@ -48,10 +48,10 @@ router
   });
 
 router.route('/').put(async (req, res) => {
-  const { wordSectionStateId } = req.body;
+  const { wordSectionState } = req.body;
   try {
-    const results = await completeWordSection(
-      wordSectionStateId
+    const results = await updateWordSectionState(
+      wordSectionState
     );
     return res.status(StatusCodes.OK).send(results);
   } catch (error) {

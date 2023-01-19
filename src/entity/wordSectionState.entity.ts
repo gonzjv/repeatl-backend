@@ -22,6 +22,15 @@ export class WordSectionState {
   @Column()
   inLearning!: boolean;
 
+  @Column()
+  isIntroActive!: boolean;
+
+  @Column()
+  isFirstRepeatActive!: boolean;
+
+  @Column()
+  isSecondRepeatActive!: boolean;
+
   @ManyToOne(
     () => CollectionState,
     (state) => state.wordSectionStateArr,

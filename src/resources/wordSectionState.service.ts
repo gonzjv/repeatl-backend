@@ -7,12 +7,13 @@ const wordSectionStateRepo =
 const collectionStateRepo =
   repeatlDataSource.getRepository(CollectionState);
 
-// export interface IWord {
-//   native: string;
-//   foreign: string;
-//   mnemoTag: string;
-//   transcription: string;
-// }
+interface IWordSectionState {
+  id: number;
+  isCompleted: boolean;
+  isIntroActive: boolean;
+  isFirstRepeatActive: boolean;
+  isSecondRepeatActive: boolean;
+}
 
 const getWordSectionStateArr = async () =>
   await wordSectionStateRepo.find({
@@ -34,7 +35,10 @@ const addWordSectionState = async (
     wordSectionId: wordSectionId,
     collectionState: collectionState!,
     inLearning: true,
+    isIntroActive: true,
     isCompleted: false,
+    isFirstRepeatActive: false,
+    isSecondRepeatActive: false,
   });
 
   const results = await wordSectionStateRepo.save(
@@ -55,15 +59,22 @@ const getWordSectionState = async (
     },
   });
 
-const completeWordSection = async (
-  wordSectionStateId: number
+const updateWordSectionState = async (
+  wordSectionState: IWordSectionState
 ) => {
   const elementToUpdate =
     await wordSectionStateRepo.findOneBy({
-      id: wordSectionStateId,
+      id: wordSectionState.id,
     });
 
-  elementToUpdate!.isCompleted = true;
+  elementToUpdate!.isCompleted =
+    wordSectionState.isCompleted;
+  elementToUpdate!.isIntroActive =
+    wordSectionState.isIntroActive;
+  elementToUpdate!.isFirstRepeatActive =
+    wordSectionState.isFirstRepeatActive;
+  elementToUpdate!.isSecondRepeatActive =
+    wordSectionState.isSecondRepeatActive;
 
   const results =
     elementToUpdate &&
@@ -75,5 +86,5 @@ export {
   getWordSectionStateArr,
   getWordSectionState,
   addWordSectionState,
-  completeWordSection,
+  updateWordSectionState,
 };

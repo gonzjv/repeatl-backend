@@ -17,6 +17,9 @@ export class WordState {
   @Column()
   isCompleted!: boolean;
 
+  @Column()
+  isFirstRepeatComplete!: boolean;
+
   @ManyToOne(
     () => WordSectionState,
     (state) => state.wordStateArr,

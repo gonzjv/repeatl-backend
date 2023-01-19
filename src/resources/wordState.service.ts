@@ -8,12 +8,12 @@ const wordSectionRepo = repeatlDataSource.getRepository(
   WordSectionState
 );
 
-// export interface IWord {
-//   native: string;
-//   foreign: string;
-//   mnemoTag: string;
-//   transcription: string;
-// }
+interface IWordState {
+  id: number;
+  wordId: number;
+  isCompleted: boolean;
+  isFirstRepeatComplete: boolean;
+}
 
 const getWordStateArr = async () =>
   await wordStateRepo.find({
@@ -34,6 +34,7 @@ const addWordState = async (
     wordId: wordId,
     wordSectionState: wordSectionState!,
     isCompleted: false,
+    isFirstRepeatComplete: false,
   });
 
   const results = await wordStateRepo.save(wordState);
@@ -64,9 +65,30 @@ const completeWord = async (wordStateId: number) => {
     (await wordStateRepo.save(elementToUpdate));
   return results;
 };
+
+const completeFirstRepeatBatch = async (
+  wordStateIdArr: number[]
+) => {
+  let results: IWordState[] = [];
+  wordStateIdArr.map(async (wordStateId) => {
+    const elementToUpdate = await wordStateRepo.findOneBy({
+      id: wordStateId,
+    });
+
+    elementToUpdate!.isFirstRepeatComplete = true;
+
+    elementToUpdate &&
+      results.push(
+        await wordStateRepo.save(elementToUpdate)
+      );
+  });
+  return results;
+};
+
 export {
   addWordState,
   getWordState,
   getWordStateArr,
   completeWord,
+  completeFirstRepeatBatch,
 };
