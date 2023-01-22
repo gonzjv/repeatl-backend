@@ -12,9 +12,14 @@ import { modelSectionRouter } from './resources/modelSection.router';
 import { phraseRouter } from './resources/phrase.router';
 import { progressModelRouter } from './resources/progressModel.router';
 import { checkToken } from './common/helpers';
-import { wordRouter } from './resources/word.router.ts';
+import { wordRouter } from './resources/word.router';
 import { wordSectionRouter } from './resources/wordSection.router';
 import { progressWordRouter } from './resources/progressWord.router';
+import { progressRouter } from './resources/progress.router';
+import { courseStateRouter } from './resources/courseState.router';
+import { collectionStateRouter } from './resources/collectionState.router';
+import { wordSectionStateRouter } from './resources/wordSectionState.router';
+import { wordStateRouter } from './resources/wordState.router';
 // import { checkToken } from './common/helpers';
 // import { StatusCodes } from 'http-status-codes';
 
@@ -71,6 +76,20 @@ app.use('/progressModels', checkToken, progressModelRouter);
 app.use('/wordSections', checkToken, wordSectionRouter);
 app.use('/words', checkToken, wordRouter);
 app.use('/progressWord', checkToken, progressWordRouter);
+app.use('/progress', checkToken, progressRouter);
+app.use('/courseState', checkToken, courseStateRouter);
+app.use(
+  '/collectionState',
+  checkToken,
+  collectionStateRouter
+);
+app.use(
+  '/wordSectionState',
+  checkToken,
+  wordSectionStateRouter
+);
+
+app.use('/wordState', checkToken, wordStateRouter);
 
 app.listen(PORT_NODE_HOST, () => {
   stdout.write(

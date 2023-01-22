@@ -31,6 +31,8 @@ interface ICsvRow {
   phraseFL3: string;
   wordNL: string;
   wordFL: string;
+  mnemoTag: string;
+  transcription: string;
 }
 const SEPARATOR = '/';
 
@@ -161,10 +163,13 @@ const addWordFromCsv = async (
   wordSectionId: number,
   csvRow: ICsvRow
 ) => {
-  const { wordNL, wordFL } = csvRow;
+  const { wordNL, wordFL, mnemoTag, transcription } =
+    csvRow;
   const wordData: IWord = {
     foreign: wordFL,
     native: wordNL,
+    mnemoTag: mnemoTag,
+    transcription: transcription,
   };
   const wordFromDb = await getWord(wordNL, wordSectionId);
   const isWordExist = wordFromDb !== null ? true : false;

@@ -9,6 +9,8 @@ const wordSectionRepo =
 export interface IWord {
   native: string;
   foreign: string;
+  mnemoTag: string;
+  transcription: string;
 }
 
 const addWord = async (
@@ -22,6 +24,8 @@ const addWord = async (
   const word = wordRepo.create({
     native: wordData.native,
     foreign: wordData.foreign,
+    mnemoTag: wordData.mnemoTag,
+    transcription: wordData.transcription,
     wordSection: wordSection!,
   });
 

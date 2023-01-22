@@ -37,6 +37,8 @@ router.route('/:wordSectionId').post(async (req, res) => {
       label: req.body.label,
       native: req.body.native,
       foreign: req.body.foreign,
+      mnemoTag: req.body.mnemoTag,
+      transcription: req.body.transcription,
     };
     const results = await addWord(
       Number(req.params.wordSectionId),
