@@ -47,7 +47,10 @@ const getCollectionState = async (
   collectionId: number
 ) =>
   await collectionStateRepo.findOne({
-    relations: { wordSectionStateArr: true },
+    relations: {
+      wordSectionStateArr: true,
+      modelSectionStateArr: true,
+    },
     where: {
       courseState: { id: courseStateId },
       collectionId: collectionId,

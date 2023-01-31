@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CourseState } from './courseState.entity';
+import { ModelSectionState } from './modelSectionState.entity';
 import { WordSectionState } from './wordSectionState.entity';
 
 @Entity()
@@ -36,4 +37,10 @@ export class CollectionState {
     (state) => state.collectionState
   )
   wordSectionStateArr!: WordSectionState[];
+
+  @OneToMany(
+    () => ModelSectionState,
+    (state) => state.collectionState
+  )
+  modelSectionStateArr!: ModelSectionState[];
 }
