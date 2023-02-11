@@ -1,50 +1,63 @@
 import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
-  addModelState,
-  completeModel,
-  getModelState,
-  getModelStateArr,
-} from './modelState.service';
+  addModelSecionState,
+  getModelSectionState,
+  getModelSectionStateArr,
+  updateModelSectionState,
+} from './modelSectionState.service';
 
 const router = Router();
 
 router.route('/').get(async (_, res) => {
   try {
-    const modelStateArr = await getModelStateArr();
-    res.json(modelStateArr);
+    const modelSectionStateArr =
+      await getModelSectionStateArr();
+    res.json(modelSectionStateArr);
   } catch (error) {
     res.status(StatusCodes.NOT_FOUND).send(error);
   }
 });
 
 router
-  .route('/:modelSectionStateId.:modelId')
+  .route('/:collectionStateId.:modelSectionId')
   .get(async (req, res) => {
     try {
-      const modelState = await getModelState(
-        Number(req.params.modelSectionStateId),
-        Number(req.params.modelId)
+      const collectionState = await getModelSectionState(
+        Number(req.params.collectionStateId),
+        Number(req.params.modelSectionId)
       );
-      res.json(modelState);
+      res.json(collectionState);
     } catch (error) {
       res.status(StatusCodes.NOT_FOUND).send(error);
     }
   });
 
 router
-  .route('/:modelSectionStateId.:modelId')
+  .route('/:collectionStateId.:modelSectionId')
   .post(async (req, res) => {
     try {
-      const results = await addModelState(
-        Number(req.params.modelSectionStateId),
-        Number(req.params.modelId)
+      const results = await addModelSecionState(
+        Number(req.params.collectionStateId),
+        Number(req.params.modelSectionId)
       );
       return res.status(StatusCodes.OK).send(results);
     } catch (error) {
       res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
     }
   });
+
+router.route('/').put(async (req, res) => {
+  const { modelSectionState } = req.body;
+  try {
+    const results = await updateModelSectionState(
+      modelSectionState
+    );
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
 
 // router.route('/:id').delete(async (req, res) => {
 //   try {
@@ -63,14 +76,4 @@ router
 //   }
 // });
 
-router.route('/').put(async (req, res) => {
-  const { wordStateId: modelStateId } = req.body;
-  try {
-    const results = await completeModel(modelStateId);
-    return res.status(StatusCodes.OK).send(results);
-  } catch (error) {
-    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
-  }
-});
-
-export { router as modelStateRouter };
+export { router as modelSectionStateRouter };
