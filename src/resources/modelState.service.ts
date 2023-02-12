@@ -1,9 +1,12 @@
 import { repeatlDataSource } from '../../app-data-source';
 import { ModelSection } from '../entity/modelSection.entity';
+import { ModelSectionState } from '../entity/modelSectionState.entity';
 import { ModelState } from '../entity/modelState.entity';
 
 const modelStateRepo =
   repeatlDataSource.getRepository(ModelState);
+const modelSectionStateRepo =
+  repeatlDataSource.getRepository(ModelSectionState);
 const modelSectionRepo =
   repeatlDataSource.getRepository(ModelSection);
 
@@ -22,12 +25,12 @@ const getModelStateArr = async () =>
   });
 
 const addModelState = async (
-  modelSectionId: number,
+  modelSectionStateId: number,
   modelId: number
 ) => {
   const modelSectionState =
-    await modelSectionRepo.findOneBy({
-      id: modelSectionId,
+    await modelSectionStateRepo.findOneBy({
+      id: modelSectionStateId,
     });
 
   const modelState = modelStateRepo.create({
@@ -38,6 +41,34 @@ const addModelState = async (
 
   const results = await modelStateRepo.save(modelState);
   return results;
+};
+
+const addModelStateArr = async (
+  modelSectionStateId: number
+) => {
+  const modelSectionState =
+    await modelSectionStateRepo.findOneBy({
+      id: modelSectionStateId,
+    });
+
+  const modelSection = await modelSectionRepo.findOneBy({
+    id: modelSectionState?.modelSectionId,
+  });
+
+  let modelStateArr = [];
+
+  for (const model of modelSection!.models) {
+    const newModelState = modelStateRepo.create({
+      modelId: model.id,
+      modelSectionState: modelSectionState!,
+      isCompleted: false,
+    });
+
+    const result = await modelStateRepo.save(newModelState);
+    modelStateArr.push(result);
+  }
+
+  return modelStateArr;
 };
 
 const getModelState = async (
@@ -66,6 +97,7 @@ const completeModel = async (modelStateId: number) => {
 
 export {
   addModelState,
+  addModelStateArr,
   getModelState,
   getModelStateArr,
   completeModel,
