@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addModelState,
+  addModelStateArr,
   completeModel,
   getModelState,
   getModelStateArr,
@@ -39,6 +40,19 @@ router
       const results = await addModelState(
         Number(req.params.modelSectionStateId),
         Number(req.params.modelId)
+      );
+      return res.status(StatusCodes.OK).send(results);
+    } catch (error) {
+      res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+    }
+  });
+
+router
+  .route('/addArray/:modelSectionStateId')
+  .post(async (req, res) => {
+    try {
+      const results = await addModelStateArr(
+        Number(req.params.modelSectionStateId)
       );
       return res.status(StatusCodes.OK).send(results);
     } catch (error) {

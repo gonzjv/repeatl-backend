@@ -50,10 +50,16 @@ const addModelStateArr = async (
     await modelSectionStateRepo.findOneBy({
       id: modelSectionStateId,
     });
-
-  const modelSection = await modelSectionRepo.findOneBy({
-    id: modelSectionState?.modelSectionId,
+  console.table(modelSectionState);
+  const modelSection = await modelSectionRepo.findOne({
+    relations: {
+      models: true,
+    },
+    where: {
+      id: modelSectionState?.modelSectionId,
+    },
   });
+  console.table(modelSection);
 
   let modelStateArr = [];
 
@@ -63,6 +69,7 @@ const addModelStateArr = async (
       modelSectionState: modelSectionState!,
       isCompleted: false,
     });
+    console.table(newModelState);
 
     const result = await modelStateRepo.save(newModelState);
     modelStateArr.push(result);
