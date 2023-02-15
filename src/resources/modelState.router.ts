@@ -78,7 +78,7 @@ router
 // });
 
 router.route('/').put(async (req, res) => {
-  const { wordStateId: modelStateId } = req.body;
+  const { modelStateId } = req.body;
   try {
     const results = await completeModel(modelStateId);
     return res.status(StatusCodes.OK).send(results);
