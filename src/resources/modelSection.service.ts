@@ -41,17 +41,31 @@ const getModelSection = async (
 
 const getCompletedModelSectionArr = async (
   userId: number
-) =>
-  await modelSectionStateRepo.find({
-    where: {
-      collectionState: {
-        courseState: {
-          progress: { user: { id: userId } },
+) => {
+  let completedSectionArr = [];
+  const completedStateArr =
+    await modelSectionStateRepo.find({
+      where: {
+        collectionState: {
+          courseState: {
+            progress: { user: { id: userId } },
+          },
         },
+        isCompleted: true,
       },
-      isCompleted: true,
-    },
-  });
+    });
+  for (const state of completedStateArr) {
+    const completedSection = await modelSectionRepo.findOne(
+      {
+        where: { id: state.modelSectionId },
+        relations: { models: true },
+      }
+    );
+    console.log('completedSection', completedSection);
+    completedSectionArr.push(completedSection);
+  }
+  return completedSectionArr;
+};
 
 export {
   addModelSection,
