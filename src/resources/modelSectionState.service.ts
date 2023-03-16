@@ -53,7 +53,7 @@ const getModelSectionState = async (
     },
   });
 
-const updateModelSectionState = async (
+const completeModelSection = async (
   modelSectionState: IModelSectionState
 ) => {
   const elementToUpdate =
@@ -74,5 +74,5 @@ export {
   addModelSecionState,
   getModelSectionState,
   getModelSectionStateArr,
-  updateModelSectionState,
+  completeModelSection,
 };

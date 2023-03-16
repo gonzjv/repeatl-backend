@@ -4,6 +4,7 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { CollectionState } from './collectionState.entity';
 import { ModelState } from './modelState.entity';
@@ -21,6 +22,9 @@ export class ModelSectionState {
 
   @Column()
   inLearning!: boolean;
+
+  @UpdateDateColumn()
+  updatedDate!: Date;
 
   @ManyToOne(
     () => CollectionState,

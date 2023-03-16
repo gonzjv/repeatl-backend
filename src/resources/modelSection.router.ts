@@ -79,7 +79,6 @@ router.route('/:id').delete(async (req, res) => {
 
 router.route('/completed/:userId').get(async (req, res) => {
   try {
-    console.log('FLAG!!!!');
     const modelSections =
       await modelSectionService.getCompletedModelSectionArr(
         Number(req.params.userId)
