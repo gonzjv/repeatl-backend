@@ -33,6 +33,7 @@ const addModelSecionState = async (
     collectionState: collectionState!,
     inLearning: true,
     isCompleted: false,
+    sameDayRepeatDone: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -70,9 +71,40 @@ const completeModelSection = async (
   return results;
 };
 
+// const REPEAT_TYPES = {
+//   SAME_DAY: 'sameDay',
+//   WEEKLY_FIRST: 'weeklyFirst',
+// };
+
+const completeRepeat = async (
+  collectionStateId: number,
+  sectionId: number
+  // repeatType: string
+) => {
+  const elementToUpdate = await getModelSectionState(
+    collectionStateId,
+    sectionId
+  );
+
+  // await modelSectionStateRepo.findOneBy({
+  //   id: sectionId,
+  // });
+  console.log('elementToUpdate', elementToUpdate);
+  // if (repeatType === REPEAT_TYPES.SAME_DAY) {
+  if (!elementToUpdate?.sameDayRepeatDone) {
+    elementToUpdate!.sameDayRepeatDone = true;
+  }
+
+  const results =
+    elementToUpdate &&
+    (await modelSectionStateRepo.save(elementToUpdate));
+  return results;
+};
+
 export {
   addModelSecionState,
   getModelSectionState,
   getModelSectionStateArr,
   completeModelSection,
+  completeRepeat,
 };

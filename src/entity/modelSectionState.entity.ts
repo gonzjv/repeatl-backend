@@ -23,6 +23,9 @@ export class ModelSectionState {
   @Column()
   inLearning!: boolean;
 
+  @Column()
+  sameDayRepeatDone!: boolean;
+
   @UpdateDateColumn()
   updatedDate!: Date;
 

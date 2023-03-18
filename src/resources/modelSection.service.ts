@@ -68,7 +68,10 @@ const getCompletedModelSectionArr = async (
       state.updatedDate.toLocaleDateString();
     console.log('currentDate', currentDate);
     console.log('completeDate', completeDate);
-    if (currentDate === completeDate) {
+    if (
+      currentDate >= completeDate &&
+      !state.sameDayRepeatDone
+    ) {
       const completedSection =
         await modelSectionRepo.findOne({
           where: { id: state.modelSectionId },
