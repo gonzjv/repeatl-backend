@@ -1,4 +1,5 @@
 import { repeatlDataSource } from '../../app-data-source';
+import { checkSection } from '../common/helpers';
 import { Collection } from '../entity/collection.entity';
 import { ModelSection } from '../entity/modelSection.entity';
 import { ModelSectionState } from '../entity/modelSectionState.entity';
@@ -42,7 +43,7 @@ const getModelSection = async (
 const getCompletedModelSectionArr = async (
   userId: number
 ) => {
-  let completedSectionArr = [];
+  let completedSectionArr: ModelSection[] = [];
   // let toRepeatStateArr = [];
   const completedStateArr =
     await modelSectionStateRepo.find({
@@ -58,27 +59,42 @@ const getCompletedModelSectionArr = async (
 
   // const currentDate = Date();
   // console.log('currentTime', currentDate);
-  const currentDate = new Date().toLocaleDateString();
-  // console.log('currentTimeNew', currentTimeNew);
+  // const currentDate = new Date().toLocaleDateString();
   // const dateNow = Date.now();
   // console.log('dateNow', dateNow);
 
+  // const checkSection =(state:ModelSectionState)=>{
+  //   const completeDate =
+  //   state.updatedDate.toLocaleDateString();
+  // console.log('currentDate', currentDate);
+  // console.log('completeDate', completeDate);
+  // if (currentDate >= completeDate &&
+  //   !state.sameDayRepeatDone) {
+  // return true
+  // }
+
+  // }
+
+  const addSectionToArr = async (
+    state: ModelSectionState
+  ) => {
+    const completedSection = await modelSectionRepo.findOne(
+      {
+        where: { id: state.modelSectionId },
+        relations: { models: { phrases: true } },
+      }
+    );
+    completedSectionArr.push(completedSection!);
+  };
+
   for (const state of completedStateArr) {
-    const completeDate =
-      state.updatedDate.toLocaleDateString();
-    console.log('currentDate', currentDate);
-    console.log('completeDate', completeDate);
-    if (
-      currentDate >= completeDate &&
-      !state.sameDayRepeatDone
-    ) {
-      const completedSection =
-        await modelSectionRepo.findOne({
-          where: { id: state.modelSectionId },
-          relations: { models: { phrases: true } },
-        });
-      completedSectionArr.push(completedSection);
-    }
+    // const completeDate =
+    //   state.updatedDate.toLocaleDateString();
+    // console.log('currentDate', currentDate);
+    // console.log('completeDate', completeDate);
+
+    const isRepeatNeeded = checkSection(state) && true;
+    isRepeatNeeded && (await addSectionToArr(state));
   }
   return completedSectionArr;
   // return completedStateArr;

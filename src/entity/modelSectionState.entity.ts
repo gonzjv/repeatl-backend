@@ -26,6 +26,9 @@ export class ModelSectionState {
   @Column()
   sameDayRepeatDone!: boolean;
 
+  @Column()
+  weeklyFirstRepeatDone!: boolean;
+
   @UpdateDateColumn()
   updatedDate!: Date;
 

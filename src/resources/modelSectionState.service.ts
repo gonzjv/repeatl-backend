@@ -34,6 +34,7 @@ const addModelSecionState = async (
     inLearning: true,
     isCompleted: false,
     sameDayRepeatDone: false,
+    weeklyFirstRepeatDone: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -85,6 +86,8 @@ const completeRepeat = async (
     collectionStateId,
     sectionId
   );
+  const saveElement = async (el: IModelSectionState) =>
+    await modelSectionStateRepo.save(el!);
 
   // await modelSectionStateRepo.findOneBy({
   //   id: sectionId,
@@ -93,12 +96,16 @@ const completeRepeat = async (
   // if (repeatType === REPEAT_TYPES.SAME_DAY) {
   if (!elementToUpdate?.sameDayRepeatDone) {
     elementToUpdate!.sameDayRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weeklyFirstRepeatDone) {
+    elementToUpdate.weeklyFirstRepeatDone = true;
+    return saveElement(elementToUpdate!);
   }
 
-  const results =
-    elementToUpdate &&
-    (await modelSectionStateRepo.save(elementToUpdate));
-  return results;
+  // const results =
+  //   elementToUpdate &&
+  //   (await modelSectionStateRepo.save(elementToUpdate));
+  // return results;
 };
 
 export {
