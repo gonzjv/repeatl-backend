@@ -30,29 +30,44 @@ export const checkToken = (
   });
 };
 
-const MS_PER_DAY = 86400000;
+// const MS_PER_DAY = 86400000;
 
 export const checkSection = (state: ModelSectionState) => {
   const currentDate = new Date().toLocaleDateString();
-  const completeDate =
-    state.updatedDate.toLocaleDateString();
+  const updateDate = state.updatedDate.toLocaleDateString();
+  const updateDateMs = Number(state.updatedDate);
   console.log('state', state);
   console.log('currentDate', currentDate);
-  console.log('completeDate', completeDate);
+  console.log('completeDate', updateDate);
 
-  const diff =
-    Number(new Date()) - Number(state.updatedDate);
+  const currentDate00am = Date.parse(currentDate);
+  const diff = Number(new Date()) - updateDateMs;
   console.log('diff is ', diff);
+  console.log('currentDate at 00 ', currentDate00am);
+  console.log('currentDate in ms ', Number(new Date()));
+  console.log('updateDate  in ms ', updateDateMs);
+
+  const isSameDayRepeatNeeded =
+    currentDate >= updateDate && !state.sameDayRepeatDone;
+
+  const isWeeklyFirstRepeatNeeded =
+    currentDate > updateDate &&
+    !state.weeklyFirstRepeatDone;
+
+  const isWeeklySecondRepeatNeeded =
+    state.weeklyFirstRepeatDone &&
+    !state.weeklySecondRepeatDone &&
+    currentDate00am > updateDateMs;
+
+  // const isSecWeekNeed =
+  //   state.weeklySixRepeatDone &&
+  //   !state.secWeekRepeatDone &&
+  //   currentDate00am > updateDateMs + 6*MS_PER_DAY;
 
   if (
-    (currentDate > completeDate &&
-      !state.weeklyFirstRepeatDone) ||
-    (state.weeklyFirstRepeatDone && diff > MS_PER_DAY)
-  )
-    return true;
-  else if (
-    currentDate >= completeDate &&
-    !state.sameDayRepeatDone
+    isSameDayRepeatNeeded ||
+    isWeeklyFirstRepeatNeeded ||
+    isWeeklySecondRepeatNeeded
   )
     return true;
 };

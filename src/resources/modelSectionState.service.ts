@@ -35,6 +35,7 @@ const addModelSecionState = async (
     isCompleted: false,
     sameDayRepeatDone: false,
     weeklyFirstRepeatDone: false,
+    weeklySecondRepeatDone: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -99,6 +100,9 @@ const completeRepeat = async (
     return saveElement(elementToUpdate!);
   } else if (!elementToUpdate.weeklyFirstRepeatDone) {
     elementToUpdate.weeklyFirstRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weeklySecondRepeatDone) {
+    elementToUpdate.weeklySecondRepeatDone = true;
     return saveElement(elementToUpdate!);
   }
 
