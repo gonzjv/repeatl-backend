@@ -31,6 +31,11 @@ export const checkToken = (
 };
 
 const MS_PER_DAY = 86400000;
+const MS_PER_SIX_DAYS = 6 * MS_PER_DAY;
+const MS_PER_13_DAYS = 13 * MS_PER_DAY;
+const MS_PER_29_DAYS = 29 * MS_PER_DAY;
+const MS_PER_59_DAYS = 59 * MS_PER_DAY;
+const MS_PER_179_DAYS = 179 * MS_PER_DAY;
 
 export const checkSection = (state: ModelSectionState) => {
   const currentDate = new Date().toLocaleDateString();
@@ -47,46 +52,104 @@ export const checkSection = (state: ModelSectionState) => {
   console.log('currentDate in ms ', Number(new Date()));
   console.log('updateDate  in ms ', updateDateMs);
 
+  const {
+    sameDayRepeatDone,
+    weeklyFirstRepeatDone,
+    weeklySecondRepeatDone,
+    weekly3done,
+    weekly4Done,
+    weekly5Done,
+    weekly6Done,
+    secondWeekDone,
+    secondWeekAndDayDone,
+    fourthWeekDone,
+    fourthWeekAndDayDone,
+    secondMonthDone,
+    secondMonthAndDayDone,
+    fourthMonthDone,
+    fourthMonthAndDayDone,
+    tenthMonthDone,
+    tenthMonthAndDayDone,
+  } = state;
   const isSameDayRepeatNeeded =
-    currentDate >= updateDate && !state.sameDayRepeatDone;
+    currentDate >= updateDate && !sameDayRepeatDone;
 
   const isWeeklyFirstRepeatNeeded =
-    currentDate > updateDate &&
-    !state.weeklyFirstRepeatDone;
+    currentDate > updateDate && !weeklyFirstRepeatDone;
 
   const isWeeklySecondRepeatNeeded =
-    state.weeklyFirstRepeatDone &&
-    !state.weeklySecondRepeatDone &&
+    weeklyFirstRepeatDone &&
+    !weeklySecondRepeatDone &&
     currentDate00am > updateDateMs;
 
   const isWeekly3needed =
-    state.weeklySecondRepeatDone &&
-    !state.weekly3done &&
+    weeklySecondRepeatDone &&
+    !weekly3done &&
     currentDate00am > updateDateMs;
 
   const isWeekly4needed =
-    state.weekly3done &&
-    !state.weekly4Done &&
+    weekly3done &&
+    !weekly4Done &&
     currentDate00am > updateDateMs;
 
   const isWeekly5needed =
-    state.weekly4Done &&
-    !state.weekly5Done &&
+    weekly4Done &&
+    !weekly5Done &&
     currentDate00am > updateDateMs;
 
   const isWeekly6needed =
-    state.weekly5Done &&
-    !state.weekly6Done &&
+    weekly5Done &&
+    !weekly6Done &&
     currentDate00am > updateDateMs;
 
   const isSecWeekNeed =
-    state.weekly6Done &&
-    !state.secondWeekDone &&
-    currentDate00am > updateDateMs + 6 * MS_PER_DAY;
+    weekly6Done &&
+    !secondWeekDone &&
+    currentDate00am > updateDateMs + MS_PER_SIX_DAYS;
 
-  const isSecWeek1Need =
-    state.secondWeekDone &&
-    !state.secondWeek1done &&
+  const isSecWeekAndDayNeed =
+    secondWeekDone &&
+    !secondWeekAndDayDone &&
+    currentDate00am > updateDateMs;
+
+  const isFourthWeekNeed =
+    secondWeekAndDayDone &&
+    !fourthWeekDone &&
+    currentDate00am > updateDateMs + MS_PER_13_DAYS;
+
+  const isFourthWeekAndDayNeed =
+    fourthWeekDone &&
+    !fourthWeekAndDayDone &&
+    currentDate00am > updateDateMs;
+
+  const isSecondMonthNeed =
+    fourthWeekAndDayDone &&
+    !secondMonthDone &&
+    currentDate00am > updateDateMs + MS_PER_29_DAYS;
+
+  const isSecondMonthAndDayNeed =
+    secondMonthDone &&
+    !secondMonthAndDayDone &&
+    currentDate00am > updateDateMs;
+
+  const isFourthMonthNeed =
+    secondMonthAndDayDone &&
+    !fourthMonthDone &&
+    currentDate00am > updateDateMs + MS_PER_59_DAYS;
+
+  const isFourthMonthAndDayNeed =
+    fourthMonthDone &&
+    !fourthMonthAndDayDone &&
+    currentDate00am > updateDateMs;
+
+  const isTenthMonthNeed =
+    fourthMonthAndDayDone &&
+    !tenthMonthDone &&
+    currentDate00am > updateDateMs + MS_PER_179_DAYS;
+
+  const isTenthMonthAndDayNeed =
+    tenthMonthDone &&
+    !tenthMonthAndDayDone &&
     currentDate00am > updateDateMs;
 
   if (
@@ -98,7 +161,15 @@ export const checkSection = (state: ModelSectionState) => {
     isWeekly5needed ||
     isWeekly6needed ||
     isSecWeekNeed ||
-    isSecWeek1Need
+    isSecWeekAndDayNeed ||
+    isFourthWeekNeed ||
+    isFourthWeekAndDayNeed ||
+    isSecondMonthNeed ||
+    isSecondMonthAndDayNeed ||
+    isFourthMonthNeed ||
+    isFourthMonthAndDayNeed ||
+    isTenthMonthNeed ||
+    isTenthMonthAndDayNeed
   )
     return true;
 };

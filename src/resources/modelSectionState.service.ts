@@ -41,7 +41,15 @@ const addModelSecionState = async (
     weekly5Done: false,
     weekly6Done: false,
     secondWeekDone: false,
-    secondWeek1done: false,
+    secondWeekAndDayDone: false,
+    fourthWeekDone: false,
+    fourthWeekAndDayDone: false,
+    secondMonthDone: false,
+    secondMonthAndDayDone: false,
+    fourthMonthDone: false,
+    fourthMonthAndDayDone: false,
+    tenthMonthDone: false,
+    tenthMonthAndDayDone: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -79,15 +87,9 @@ const completeModelSection = async (
   return results;
 };
 
-// const REPEAT_TYPES = {
-//   SAME_DAY: 'sameDay',
-//   WEEKLY_FIRST: 'weeklyFirst',
-// };
-
 const completeRepeat = async (
   collectionStateId: number,
   sectionId: number
-  // repeatType: string
 ) => {
   const elementToUpdate = await getModelSectionState(
     collectionStateId,
@@ -96,11 +98,7 @@ const completeRepeat = async (
   const saveElement = async (el: IModelSectionState) =>
     await modelSectionStateRepo.save(el!);
 
-  // await modelSectionStateRepo.findOneBy({
-  //   id: sectionId,
-  // });
   console.log('elementToUpdate', elementToUpdate);
-  // if (repeatType === REPEAT_TYPES.SAME_DAY) {
   if (!elementToUpdate?.sameDayRepeatDone) {
     elementToUpdate!.sameDayRepeatDone = true;
     return saveElement(elementToUpdate!);
@@ -125,15 +123,34 @@ const completeRepeat = async (
   } else if (!elementToUpdate.secondWeekDone) {
     elementToUpdate.secondWeekDone = true;
     return saveElement(elementToUpdate!);
-  } else if (!elementToUpdate.secondWeek1done) {
-    elementToUpdate.secondWeek1done = true;
+  } else if (!elementToUpdate.secondWeekAndDayDone) {
+    elementToUpdate.secondWeekAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthWeekDone) {
+    elementToUpdate.fourthWeekDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthWeekAndDayDone) {
+    elementToUpdate.fourthWeekAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondMonthDone) {
+    elementToUpdate.secondMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondMonthAndDayDone) {
+    elementToUpdate.secondMonthAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthMonthDone) {
+    elementToUpdate.fourthMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthMonthAndDayDone) {
+    elementToUpdate.fourthMonthAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.tenthMonthDone) {
+    elementToUpdate.tenthMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.tenthMonthAndDayDone) {
+    elementToUpdate.tenthMonthAndDayDone = true;
     return saveElement(elementToUpdate!);
   }
-
-  // const results =
-  //   elementToUpdate &&
-  //   (await modelSectionStateRepo.save(elementToUpdate));
-  // return results;
 };
 
 export {
