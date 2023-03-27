@@ -33,6 +33,23 @@ const addModelSecionState = async (
     collectionState: collectionState!,
     inLearning: true,
     isCompleted: false,
+    sameDayRepeatDone: false,
+    weeklyFirstRepeatDone: false,
+    weeklySecondRepeatDone: false,
+    weekly3done: false,
+    weekly4Done: false,
+    weekly5Done: false,
+    weekly6Done: false,
+    secondWeekDone: false,
+    secondWeekAndDayDone: false,
+    fourthWeekDone: false,
+    fourthWeekAndDayDone: false,
+    secondMonthDone: false,
+    secondMonthAndDayDone: false,
+    fourthMonthDone: false,
+    fourthMonthAndDayDone: false,
+    tenthMonthDone: false,
+    tenthMonthAndDayDone: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -53,7 +70,7 @@ const getModelSectionState = async (
     },
   });
 
-const updateModelSectionState = async (
+const completeModelSection = async (
   modelSectionState: IModelSectionState
 ) => {
   const elementToUpdate =
@@ -70,9 +87,76 @@ const updateModelSectionState = async (
   return results;
 };
 
+const completeRepeat = async (
+  collectionStateId: number,
+  sectionId: number
+) => {
+  const elementToUpdate = await getModelSectionState(
+    collectionStateId,
+    sectionId
+  );
+  const saveElement = async (el: IModelSectionState) =>
+    await modelSectionStateRepo.save(el!);
+
+  console.log('elementToUpdate', elementToUpdate);
+  if (!elementToUpdate?.sameDayRepeatDone) {
+    elementToUpdate!.sameDayRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weeklyFirstRepeatDone) {
+    elementToUpdate.weeklyFirstRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weeklySecondRepeatDone) {
+    elementToUpdate.weeklySecondRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly3done) {
+    elementToUpdate.weekly3done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly4Done) {
+    elementToUpdate.weekly4Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly5Done) {
+    elementToUpdate.weekly5Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly6Done) {
+    elementToUpdate.weekly6Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondWeekDone) {
+    elementToUpdate.secondWeekDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondWeekAndDayDone) {
+    elementToUpdate.secondWeekAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthWeekDone) {
+    elementToUpdate.fourthWeekDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthWeekAndDayDone) {
+    elementToUpdate.fourthWeekAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondMonthDone) {
+    elementToUpdate.secondMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondMonthAndDayDone) {
+    elementToUpdate.secondMonthAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthMonthDone) {
+    elementToUpdate.fourthMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.fourthMonthAndDayDone) {
+    elementToUpdate.fourthMonthAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.tenthMonthDone) {
+    elementToUpdate.tenthMonthDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.tenthMonthAndDayDone) {
+    elementToUpdate.tenthMonthAndDayDone = true;
+    return saveElement(elementToUpdate!);
+  }
+};
+
 export {
   addModelSecionState,
   getModelSectionState,
   getModelSectionStateArr,
-  updateModelSectionState,
+  completeModelSection,
+  completeRepeat,
 };

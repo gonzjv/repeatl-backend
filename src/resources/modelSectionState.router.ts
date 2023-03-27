@@ -2,9 +2,10 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addModelSecionState,
+  completeModelSection,
+  completeRepeat,
   getModelSectionState,
   getModelSectionStateArr,
-  updateModelSectionState,
 } from './modelSectionState.service';
 
 const router = Router();
@@ -50,8 +51,23 @@ router
 router.route('/').put(async (req, res) => {
   const { modelSectionState } = req.body;
   try {
-    const results = await updateModelSectionState(
+    const results = await completeModelSection(
       modelSectionState
+    );
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
+
+router.route('/completeRepeat').put(async (req, res) => {
+  const { collectionStateId, sectionId } = req.body;
+  console.log('sectionId', sectionId);
+  try {
+    const results = await completeRepeat(
+      collectionStateId,
+      sectionId
+      // repeatType
     );
     return res.status(StatusCodes.OK).send(results);
   } catch (error) {
