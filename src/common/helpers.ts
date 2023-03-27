@@ -30,7 +30,7 @@ export const checkToken = (
   });
 };
 
-// const MS_PER_DAY = 86400000;
+const MS_PER_DAY = 86400000;
 
 export const checkSection = (state: ModelSectionState) => {
   const currentDate = new Date().toLocaleDateString();
@@ -59,15 +59,46 @@ export const checkSection = (state: ModelSectionState) => {
     !state.weeklySecondRepeatDone &&
     currentDate00am > updateDateMs;
 
-  // const isSecWeekNeed =
-  //   state.weeklySixRepeatDone &&
-  //   !state.secWeekRepeatDone &&
-  //   currentDate00am > updateDateMs + 6*MS_PER_DAY;
+  const isWeekly3needed =
+    state.weeklySecondRepeatDone &&
+    !state.weekly3done &&
+    currentDate00am > updateDateMs;
+
+  const isWeekly4needed =
+    state.weekly3done &&
+    !state.weekly4Done &&
+    currentDate00am > updateDateMs;
+
+  const isWeekly5needed =
+    state.weekly4Done &&
+    !state.weekly5Done &&
+    currentDate00am > updateDateMs;
+
+  const isWeekly6needed =
+    state.weekly5Done &&
+    !state.weekly6Done &&
+    currentDate00am > updateDateMs;
+
+  const isSecWeekNeed =
+    state.weekly6Done &&
+    !state.secondWeekDone &&
+    currentDate00am > updateDateMs + 6 * MS_PER_DAY;
+
+  const isSecWeek1Need =
+    state.secondWeekDone &&
+    !state.secondWeek1done &&
+    currentDate00am > updateDateMs;
 
   if (
     isSameDayRepeatNeeded ||
     isWeeklyFirstRepeatNeeded ||
-    isWeeklySecondRepeatNeeded
+    isWeeklySecondRepeatNeeded ||
+    isWeekly3needed ||
+    isWeekly4needed ||
+    isWeekly5needed ||
+    isWeekly6needed ||
+    isSecWeekNeed ||
+    isSecWeek1Need
   )
     return true;
 };

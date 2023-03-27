@@ -36,6 +36,12 @@ const addModelSecionState = async (
     sameDayRepeatDone: false,
     weeklyFirstRepeatDone: false,
     weeklySecondRepeatDone: false,
+    weekly3done: false,
+    weekly4Done: false,
+    weekly5Done: false,
+    weekly6Done: false,
+    secondWeekDone: false,
+    secondWeek1done: false,
   });
 
   const results = await modelSectionStateRepo.save(
@@ -103,6 +109,24 @@ const completeRepeat = async (
     return saveElement(elementToUpdate!);
   } else if (!elementToUpdate.weeklySecondRepeatDone) {
     elementToUpdate.weeklySecondRepeatDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly3done) {
+    elementToUpdate.weekly3done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly4Done) {
+    elementToUpdate.weekly4Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly5Done) {
+    elementToUpdate.weekly5Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.weekly6Done) {
+    elementToUpdate.weekly6Done = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondWeekDone) {
+    elementToUpdate.secondWeekDone = true;
+    return saveElement(elementToUpdate!);
+  } else if (!elementToUpdate.secondWeek1done) {
+    elementToUpdate.secondWeek1done = true;
     return saveElement(elementToUpdate!);
   }
 

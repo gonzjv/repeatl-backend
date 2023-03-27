@@ -32,6 +32,24 @@ export class ModelSectionState {
   @Column()
   weeklySecondRepeatDone!: boolean;
 
+  @Column()
+  weekly3done!: boolean;
+
+  @Column()
+  weekly4Done!: boolean;
+
+  @Column()
+  weekly5Done!: boolean;
+
+  @Column()
+  weekly6Done!: boolean;
+
+  @Column()
+  secondWeekDone!: boolean;
+
+  @Column()
+  secondWeek1done!: boolean;
+
   @UpdateDateColumn()
   updatedDate!: Date;
 
