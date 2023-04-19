@@ -44,7 +44,6 @@ const getCompletedModelSectionArr = async (
   userId: number
 ) => {
   let completedSectionArr: ModelSection[] = [];
-  // let toRepeatStateArr = [];
   const completedStateArr =
     await modelSectionStateRepo.find({
       where: {
@@ -56,24 +55,6 @@ const getCompletedModelSectionArr = async (
         isCompleted: true,
       },
     });
-
-  // const currentDate = Date();
-  // console.log('currentTime', currentDate);
-  // const currentDate = new Date().toLocaleDateString();
-  // const dateNow = Date.now();
-  // console.log('dateNow', dateNow);
-
-  // const checkSection =(state:ModelSectionState)=>{
-  //   const completeDate =
-  //   state.updatedDate.toLocaleDateString();
-  // console.log('currentDate', currentDate);
-  // console.log('completeDate', completeDate);
-  // if (currentDate >= completeDate &&
-  //   !state.sameDayRepeatDone) {
-  // return true
-  // }
-
-  // }
 
   const addSectionToArr = async (
     state: ModelSectionState
@@ -88,16 +69,10 @@ const getCompletedModelSectionArr = async (
   };
 
   for (const state of completedStateArr) {
-    // const completeDate =
-    //   state.updatedDate.toLocaleDateString();
-    // console.log('currentDate', currentDate);
-    // console.log('completeDate', completeDate);
-
     const isRepeatNeeded = checkSection(state) && true;
     isRepeatNeeded && (await addSectionToArr(state));
   }
   return completedSectionArr;
-  // return completedStateArr;
 };
 
 export {

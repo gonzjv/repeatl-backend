@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import {
   addWordSectionState,
+  completeWordRepeat,
   getWordSectionState,
   getWordSectionStateArr,
   updateWordSectionState,
@@ -52,6 +53,20 @@ router.route('/').put(async (req, res) => {
   try {
     const results = await updateWordSectionState(
       wordSectionState
+    );
+    return res.status(StatusCodes.OK).send(results);
+  } catch (error) {
+    res.status(StatusCodes.NOT_ACCEPTABLE).send(error);
+  }
+});
+
+router.route('/completeRepeat').put(async (req, res) => {
+  const { collectionStateId, sectionId } = req.body;
+  console.log('sectionId', sectionId);
+  try {
+    const results = await completeWordRepeat(
+      collectionStateId,
+      sectionId
     );
     return res.status(StatusCodes.OK).send(results);
   } catch (error) {

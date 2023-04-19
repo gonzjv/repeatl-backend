@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { WordSection } from '../entity/wordSection.entity';
 import {
   addWordSection,
+  getCompletedWordSectionArr,
   getWordSectionArr,
 } from './wordSection.service';
 
@@ -67,6 +68,18 @@ router.route('/:id').delete(async (req, res) => {
       .send('modelSection is not exist');
   } catch (error) {
     res.status(StatusCodes.BAD_REQUEST).send(error);
+  }
+});
+
+router.route('/completed/:userId').get(async (req, res) => {
+  try {
+    const modelSections = await getCompletedWordSectionArr(
+      Number(req.params.userId)
+    );
+    console.log('completed sections', modelSections);
+    res.json(modelSections);
+  } catch (error) {
+    res.status(StatusCodes.NOT_FOUND).send(error);
   }
 });
 
