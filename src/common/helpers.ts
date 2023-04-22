@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import jwt from 'jsonwebtoken';
 import { ModelSectionState } from '../entity/modelSectionState.entity';
 import { JWT_SECRET_KEY } from './config';
+import { WordSectionState } from '../entity/wordSectionState.entity';
 
 export const checkToken = (
   req: Request,
@@ -37,7 +38,9 @@ const MS_PER_29_DAYS = 29 * MS_PER_DAY;
 const MS_PER_59_DAYS = 59 * MS_PER_DAY;
 const MS_PER_179_DAYS = 179 * MS_PER_DAY;
 
-export const checkSection = (state: ModelSectionState) => {
+export const checkSection = (
+  state: ModelSectionState | WordSectionState
+) => {
   const currentDate = new Date().toLocaleDateString();
   const updateDate = state.updatedDate.toLocaleDateString();
   const updateDateMs = Number(state.updatedDate);
